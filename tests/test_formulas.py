@@ -2,11 +2,17 @@ import numpy as np
 import pytest
 
 from src.formulas import (
+    ByteConverter,
+    HertzConverter,
     solve_clock_freq,
     solve_max_speedup,
     solve_true_speedup,
     solve_branch_prediction,
     solve_address_locations,
+    solve_storage_capacity,
+    solve_avg_memory_read_time,
+    solve_memory_data_rate,
+    solve_cache_avg_read_time,
 )
 
 
@@ -107,41 +113,66 @@ def test_solve_address_locations(inputs, expected_result) -> None:
     assert float(solve_address_locations(inputs)[0]) == expected_result
 
 
-# @pytest.mark.parametrize(
-#     "inputs, expected_result",
-#     [
-#         (inputs, expected_result),
-#     ],
-# )
-# def test_solve_storage_capacity(inputs, expected_result) -> None:
-#     assert solve_storage_capacity(inputs) == expected_result
+@pytest.mark.parametrize(
+    "inputs, expected_result",
+    [
+        ({"address_lines": 32, "data_lines": 64, "to_unit": "MB"}, 32768.00),
+    ],
+)
+def test_solve_storage_capacity(inputs, expected_result) -> None:
+    assert float(solve_storage_capacity(inputs)[0]) == expected_result
 
 
-# @pytest.mark.parametrize(
-#     "inputs, expected_result",
-#     [
-#         (inputs, expected_result),
-#     ],
-# )
-# def test_solve_avg_memory_read_time(inputs, expected_result) -> None:
-#     assert solve_avg_memory_read_time(inputs) == expected_result
+@pytest.mark.parametrize(
+    "inputs, expected_result",
+    [
+        (
+            {
+                "access_time": 5,
+                "recovery_cycles": 2,
+                "ras_cycles": 1,
+                "cas_cycles": 1,
+            },
+            9,
+        ),
+    ],
+)
+def test_solve_avg_memory_read_time(inputs, expected_result) -> None:
+    assert float(solve_avg_memory_read_time(inputs)[0]) == expected_result
 
 
-# @pytest.mark.parametrize(
-#     "inputs, units, expected_result",
-#     [
-#         (inputs, units, expected_result),
-#     ],
-# )
-# def test_solve_memory_data_rate(inputs, units, expected_result) -> None:
-#     assert solve_memory_data_rate(inputs, units) == expected_result
+@pytest.mark.parametrize(
+    "inputs, units, expected_result",
+    [
+        (
+            {
+                "memory_read_time": 5,
+                "memory_width": ByteConverter().convert(32, "b", "B"),
+                "clock_rate": HertzConverter().convert(1, "GHz", "Hz"),
+            },
+            "MB",
+            762.939453125000,
+        ),
+    ],
+)
+def test_solve_memory_data_rate(inputs, units, expected_result) -> None:
+    assert float(solve_memory_data_rate(inputs, units)[0]) == expected_result
 
 
-# @pytest.mark.parametrize(
-#     "inputs, expected_result",
-#     [
-#         (inputs, expected_result),
-#     ],
-# )
-# def test_solve_cache_avg_read_time(inputs, expected_result) -> None:
-#     assert solve_cache_avg_read_time(inputs) == expected_result
+@pytest.mark.parametrize(
+    "inputs, expected_result",
+    [
+        (
+            {
+                "p_cache": 0.9,
+                "sram": 1.0,
+                "dram": 3.0,
+                "ras": 1.0,
+                "cas": 1.0,
+            },
+            3.500,
+        ),
+    ],
+)
+def test_solve_cache_avg_read_time(inputs, expected_result) -> None:
+    assert float(solve_cache_avg_read_time(inputs)[0]) == expected_result
