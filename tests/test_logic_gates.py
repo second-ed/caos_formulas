@@ -1,6 +1,9 @@
 import pytest
 from src.logic_gates import (
     and_gate,
+    generate_inputs,
+    get_logic_outputs,
+    inverter,
     or_gate,
     nand_gate,
     nor_gate,
@@ -9,6 +12,11 @@ from src.logic_gates import (
     half_adder,
     full_adder,
 )
+
+
+def and_into_inverse(x, y):
+    z = inverter(and_gate(x, y))
+    return (z,)
 
 
 @pytest.mark.parametrize("x, y, expected", [(1, 1, 1), (1, 0, 0), (0, 1, 0), (0, 0, 0)])
@@ -69,3 +77,61 @@ def test_half_adder(x, y, expected_sum, expected_carry):
 )
 def test_full_adder(x, y, c_in, expected_sum, expected_carry):
     assert full_adder(x, y, c_in) == (expected_sum, expected_carry)
+
+
+@pytest.mark.parametrize(
+    "n, expected_output",
+    [
+        (2, [(0, 0), (0, 1), (1, 0), (1, 1)]),
+        (
+            3,
+            [
+                (0, 0, 0),
+                (0, 0, 1),
+                (0, 1, 0),
+                (0, 1, 1),
+                (1, 0, 0),
+                (1, 0, 1),
+                (1, 1, 0),
+                (1, 1, 1),
+            ],
+        ),
+        (
+            4,
+            [
+                (0, 0, 0, 0),
+                (0, 0, 0, 1),
+                (0, 0, 1, 0),
+                (0, 0, 1, 1),
+                (0, 1, 0, 0),
+                (0, 1, 0, 1),
+                (0, 1, 1, 0),
+                (0, 1, 1, 1),
+                (1, 0, 0, 0),
+                (1, 0, 0, 1),
+                (1, 0, 1, 0),
+                (1, 0, 1, 1),
+                (1, 1, 0, 0),
+                (1, 1, 0, 1),
+                (1, 1, 1, 0),
+                (1, 1, 1, 1),
+            ],
+        ),
+    ],
+)
+def test_generate_inputs(n, expected_output):
+    assert generate_inputs(n) == expected_output
+
+
+@pytest.mark.parametrize(
+    "inputs, func, expected_output",
+    [
+        (
+            generate_inputs(2),
+            and_into_inverse,
+            [(0, 0, 1), (0, 1, 1), (1, 0, 1), (1, 1, 0)],
+        )
+    ],
+)
+def test_get_logic_outputs(inputs, func, expected_output):
+    assert get_logic_outputs(inputs, func) == expected_output

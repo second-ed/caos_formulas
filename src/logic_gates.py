@@ -19,8 +19,9 @@ def get_results_df(func, output_cols: List[str]):
     params = inspect.signature(func).parameters.keys()
     n: int = len(params)
     input_cols = list(params)
-    return pd.DataFrame(get_logic_outputs(generate_inputs(n), func), columns=input_cols + output_cols)
-
+    return pd.DataFrame(
+        get_logic_outputs(generate_inputs(n), func), columns=input_cols + output_cols
+    )
 
 
 def buffer(x) -> int:
