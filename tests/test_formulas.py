@@ -170,7 +170,7 @@ def test_solve_memory_data_rate(inputs, units, expected_result) -> None:
                 "ras": 1.0,
                 "cas": 1.0,
             },
-            3.500,
+            3.300,
         ),
     ],
 )

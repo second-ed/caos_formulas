@@ -243,8 +243,8 @@ def solve_cache_avg_read_time(inputs) -> Tuple[float, str]:
     )
     equation = (
         (p_cache * (sram + ras + cas))
-        + ((1 - p_cache) * (dram + ras + cas))
-        + ((1 - p_cache) * dram)
+        + ((1 - p_cache) * (sram + dram + ras + cas))
+        # + ((1 - p_cache) * dram)
         - cache_avg_read_time
     )
 
