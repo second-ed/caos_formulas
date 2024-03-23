@@ -4,23 +4,22 @@ from itertools import product
 import inspect
 
 
-def generate_inputs(n):
+def generate_inputs(n) -> List[Tuple]:
     return list(product([0, 1], repeat=n))
 
 
-def get_logic_outputs(inputs: List[Tuple], func):
+def get_logic_outputs(inputs: List[Tuple], func) -> List[Tuple]:
     outputs = []
     for input in inputs:
         outputs.append((*input, *func(*input)))
     return outputs
 
 
-def get_results_df(func, output_cols: List[str]):
-    params = inspect.signature(func).parameters.keys()
+def get_results_df(func, output_cols: List[str]) -> pd.DataFrame:
+    params = list(inspect.signature(func).parameters.keys())
     n: int = len(params)
-    input_cols = list(params)
     return pd.DataFrame(
-        get_logic_outputs(generate_inputs(n), func), columns=input_cols + output_cols
+        get_logic_outputs(generate_inputs(n), func), columns=params + output_cols
     )
 
 
