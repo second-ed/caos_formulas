@@ -3,7 +3,7 @@ from src.logic_gates import (
     and_gate,
     generate_inputs,
     get_logic_outputs,
-    inverter,
+    inverter_gate,
     or_gate,
     nand_gate,
     nor_gate,
@@ -15,7 +15,7 @@ from src.logic_gates import (
 
 
 def and_into_inverse(x, y):
-    z = inverter(and_gate(x, y))
+    z = inverter_gate(and_gate(x, y))
     return (z,)
 
 

@@ -24,11 +24,11 @@ def get_results_df(func, output_cols: List[str]):
     )
 
 
-def buffer(x) -> int:
+def buffer_gate(x) -> int:
     return int(bool(x))
 
 
-def inverter(x) -> int:
+def inverter_gate(x) -> int:
     return int(bool(not x))
 
 
