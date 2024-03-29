@@ -1,23 +1,36 @@
 from typing import Callable, List, Tuple
+
 import pytest
+
 from src.logic_gates import (
     and_gate,
+    buffer_gate,
+    full_adder,
     generate_inputs,
     get_logic_outputs,
+    half_adder,
     inverter_gate,
-    or_gate,
     nand_gate,
     nor_gate,
-    xor_gate,
+    or_gate,
     xnor_gate,
-    half_adder,
-    full_adder,
+    xor_gate,
 )
 
 
 def and_into_inverse(x, y) -> Tuple[int]:
     z = inverter_gate(and_gate(x, y))
     return (z,)
+
+
+@pytest.mark.parametrize("x, expected", [(1, 1), (0, 0)])
+def test_buffer_gate(x: int, expected: int) -> None:
+    assert buffer_gate(x) == expected
+
+
+@pytest.mark.parametrize("x, expected", [(1, 0), (0, 1)])
+def test_inverter_gate(x: int, expected: int) -> None:
+    assert inverter_gate(x) == expected
 
 
 @pytest.mark.parametrize("x, y, expected", [(1, 1, 1), (1, 0, 0), (0, 1, 0), (0, 0, 0)])
@@ -76,7 +89,9 @@ def test_half_adder(x: int, y: int, expected_sum: int, expected_carry: int) -> N
         (1, 1, 1, 1, 1),
     ],
 )
-def test_full_adder(x: int, y: int, c_in: int, expected_sum: int, expected_carry: int) -> None:
+def test_full_adder(
+    x: int, y: int, c_in: int, expected_sum: int, expected_carry: int
+) -> None:
     assert full_adder(x, y, c_in) == (expected_sum, expected_carry)
 
 
@@ -134,5 +149,7 @@ def test_generate_inputs(n: int, expected_output: List[Tuple]) -> None:
         )
     ],
 )
-def test_get_logic_outputs(inputs: List[Tuple], func: Callable, expected_output: List[Tuple]) -> None:
+def test_get_logic_outputs(
+    inputs: List[Tuple], func: Callable, expected_output: List[Tuple]
+) -> None:
     assert get_logic_outputs(inputs, func) == expected_output

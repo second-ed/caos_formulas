@@ -4,15 +4,15 @@ import pytest
 from src.formulas import (
     ByteConverter,
     HertzConverter,
+    solve_address_locations,
+    solve_avg_memory_read_time,
+    solve_branch_prediction,
+    solve_cache_avg_read_time,
     solve_clock_freq,
     solve_max_speedup,
-    solve_true_speedup,
-    solve_branch_prediction,
-    solve_address_locations,
-    solve_storage_capacity,
-    solve_avg_memory_read_time,
     solve_memory_data_rate,
-    solve_cache_avg_read_time,
+    solve_storage_capacity,
+    solve_true_speedup,
 )
 
 

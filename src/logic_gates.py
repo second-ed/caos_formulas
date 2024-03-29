@@ -1,7 +1,8 @@
-from typing import List, Tuple
-import pandas as pd
-from itertools import product
 import inspect
+from itertools import product
+from typing import List, Tuple
+
+import pandas as pd
 
 
 def generate_inputs(n) -> List[Tuple]:

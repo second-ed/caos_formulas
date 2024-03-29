@@ -1,7 +1,8 @@
 from typing import Dict, Tuple
+
 import sympy as sp
 
-from src.constants import HZ_MAP, BYTES_MAP, TIME_MAP
+from src.constants import BYTES_MAP, HZ_MAP, TIME_MAP
 
 
 class HertzConverter:
@@ -231,10 +232,10 @@ def solve_memory_data_rate(inputs, units: str) -> Tuple[float, str]:
 def solve_cache_avg_read_time(inputs) -> Tuple[float, str]:
     unit_map: Dict[str, str] = {
         "p_cache": "",
-        "sram": "",
-        "dram": "",
-        "ras": "",
-        "cas": "",
+        "sram": "clocks",
+        "dram": "clocks",
+        "ras": "clocks",
+        "cas": "clocks",
         "cache_avg_read_time": "clocks",
     }
 
