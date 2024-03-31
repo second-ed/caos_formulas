@@ -4,6 +4,7 @@ import pytest
 from src.formulas import (
     ByteConverter,
     HertzConverter,
+    TimeConverter,
     solve_address_locations,
     solve_avg_memory_read_time,
     solve_branch_prediction,
@@ -14,6 +15,7 @@ from src.formulas import (
     solve_max_speedup,
     solve_memory_data_rate,
     solve_storage_capacity,
+    solve_synchronous_bus_max_bandwidth,
     solve_true_speedup,
 )
 
@@ -276,3 +278,103 @@ def test_solve_data_transfer_rate(inputs, expected_result) -> None:
 )
 def test_solve_data_transfer_efficiency(inputs, expected_result) -> None:
     assert float(solve_data_transfer_efficiency(inputs)[0]) == expected_result
+
+
+@pytest.mark.parametrize(
+    "inputs, expected_result",
+    [
+        (
+            {
+                "bus_frequency": HertzConverter().convert(10, "Hz", "Hz"),
+                "bus_width": ByteConverter().convert(10, "B", "B"),
+                "clock_cycle_time": TimeConverter().convert(10, "ns", "s"),
+                "ras": 0.5,
+                "cas": 0.5,
+                "send_clocks": 1,
+                "memory_access_time": TimeConverter().convert(20, "ns", "s"),
+                # "maximum_bandwidth": 250000000.000000,
+            },
+            250000000.000000,
+        ),
+        (
+            {
+                "bus_frequency": HertzConverter().convert(10, "Hz", "Hz"),
+                "bus_width": ByteConverter().convert(10, "B", "B"),
+                "clock_cycle_time": TimeConverter().convert(10, "ns", "s"),
+                "ras": 0.5,
+                "cas": 0.5,
+                "send_clocks": 1,
+                # "memory_access_time": TimeConverter().convert(20, "ns", "s"),
+                "maximum_bandwidth": 250000000.000000,
+            },
+            TimeConverter().convert(20, "ns", "s"),
+        ),
+        (
+            {
+                "bus_frequency": HertzConverter().convert(10, "Hz", "Hz"),
+                "bus_width": ByteConverter().convert(10, "B", "B"),
+                "clock_cycle_time": TimeConverter().convert(10, "ns", "s"),
+                "ras": 0.5,
+                "cas": 0.5,
+                # "send_clocks": 1,
+                "memory_access_time": TimeConverter().convert(20, "ns", "s"),
+                "maximum_bandwidth": 250000000.000000,
+            },
+            1,
+        ),
+        (
+            {
+                "bus_frequency": HertzConverter().convert(10, "Hz", "Hz"),
+                "bus_width": ByteConverter().convert(10, "B", "B"),
+                "clock_cycle_time": TimeConverter().convert(10, "ns", "s"),
+                "ras": 0.5,
+                # "cas": 0.5,
+                "send_clocks": 1,
+                "memory_access_time": TimeConverter().convert(20, "ns", "s"),
+                "maximum_bandwidth": 250000000.000000,
+            },
+            0.5,
+        ),
+        (
+            {
+                "bus_frequency": HertzConverter().convert(10, "Hz", "Hz"),
+                "bus_width": ByteConverter().convert(10, "B", "B"),
+                "clock_cycle_time": TimeConverter().convert(10, "ns", "s"),
+                # "ras": 0.5,
+                "cas": 0.5,
+                "send_clocks": 1,
+                "memory_access_time": TimeConverter().convert(20, "ns", "s"),
+                "maximum_bandwidth": 250000000.000000,
+            },
+            0.5,
+        ),
+        (
+            {
+                "bus_frequency": HertzConverter().convert(10, "Hz", "Hz"),
+                "bus_width": ByteConverter().convert(10, "B", "B"),
+                # "clock_cycle_time": TimeConverter().convert(10, "ns", "s"),
+                "ras": 0.5,
+                "cas": 0.5,
+                "send_clocks": 1,
+                "memory_access_time": TimeConverter().convert(20, "ns", "s"),
+                "maximum_bandwidth": 250000000.000000,
+            },
+            TimeConverter().convert(10, "ns", "s"),
+        ),
+        (
+            {
+                "bus_frequency": HertzConverter().convert(10, "Hz", "Hz"),
+                # "bus_width": ByteConverter().convert(10, "B", "B"),
+                "clock_cycle_time": TimeConverter().convert(10, "ns", "s"),
+                "ras": 0.5,
+                "cas": 0.5,
+                "send_clocks": 1,
+                "memory_access_time": TimeConverter().convert(20, "ns", "s"),
+                "maximum_bandwidth": 250000000.000000,
+            },
+            ByteConverter().convert(10, "B", "B"),
+        ),
+    ],
+)
+def test_solve_synchronous_bus_max_bandwidth(inputs, expected_result) -> None:
+    assert float(solve_synchronous_bus_max_bandwidth(inputs)[0]) == expected_result
