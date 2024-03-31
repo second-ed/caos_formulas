@@ -37,17 +37,21 @@ def solve_equation(equation, inputs, output_sym):
     return sp.solve(equation.subs(inputs), output_sym)
 
 
+def get_output_sym(inputs, symbols):
+    for sym in symbols:
+        if str(sym) not in inputs:
+            output_sym = sym
+            return output_sym
+    return None
+
+
 def solve_clock_freq(inputs: Dict) -> Tuple[float, str]:
     unit_map: Dict[str, str] = {"t": "s", "f": "Hz"}
 
     t, f = sp.symbols("t f")
     equation = 1 / t - f
 
-    output_sym = None
-    for sym in [t, f]:
-        if str(sym) not in inputs:
-            output_sym = sym
-            break
+    output_sym = get_output_sym(inputs, [t, f])
 
     if output_sym:
         result = solve_equation(equation, inputs, output_sym)[0]
@@ -63,11 +67,7 @@ def solve_max_speedup(inputs: Dict) -> Tuple[float, str]:
     max_speedup, P = sp.symbols("max_speedup P")
     equation = 1 / (1 - P) - max_speedup
 
-    output_sym = None
-    for sym in [max_speedup, P]:
-        if str(sym) not in inputs:
-            output_sym = sym
-            break
+    output_sym = get_output_sym(inputs, [max_speedup, P])
 
     if output_sym:
         result = solve_equation(equation, inputs, output_sym)[0]
@@ -83,11 +83,7 @@ def solve_true_speedup(inputs: Dict) -> Tuple[float, str]:
     true_speedup, P, n = sp.symbols("true_speedup P n")
     equation = 1 / ((1 - P) + (P / n)) - true_speedup
 
-    output_sym = None
-    for sym in [true_speedup, P, n]:
-        if str(sym) not in inputs:
-            output_sym = sym
-            break
+    output_sym = get_output_sym(inputs, [true_speedup, P, n])
 
     if output_sym:
         result = solve_equation(equation, inputs, output_sym)[0]
@@ -111,11 +107,9 @@ def solve_branch_prediction(inputs: Dict) -> Tuple[float, str]:
     )
     equation = (p_correct * cycles_saved) - (p_incorrect * cycles_cost) - total_savings
 
-    output_sym = None
-    for sym in [cycles_saved, cycles_cost, p_correct, p_incorrect, total_savings]:
-        if str(sym) not in inputs:
-            output_sym = sym
-            break
+    output_sym = get_output_sym(
+        inputs, [cycles_saved, cycles_cost, p_correct, p_incorrect, total_savings]
+    )
 
     if output_sym:
         result = solve_equation(equation, inputs, output_sym)[0]
@@ -134,11 +128,7 @@ def solve_address_locations(inputs) -> Tuple[float, str]:
     address_lines, address_locations = sp.symbols("address_lines address_locations")
     equation = (2**address_lines) - address_locations
 
-    output_sym = None
-    for sym in [address_lines, address_locations]:
-        if str(sym) not in inputs:
-            output_sym = sym
-            break
+    output_sym = get_output_sym(inputs, [address_lines, address_locations])
 
     if output_sym:
         result = solve_equation(equation, inputs, output_sym)[0]
@@ -180,17 +170,16 @@ def solve_avg_memory_read_time(inputs) -> Tuple[float, str]:
         access_time + recovery_cycles + ras_cycles + cas_cycles - avg_memory_read_time
     )
 
-    output_sym = None
-    for sym in [
-        access_time,
-        recovery_cycles,
-        ras_cycles,
-        cas_cycles,
-        avg_memory_read_time,
-    ]:
-        if str(sym) not in inputs:
-            output_sym = sym
-            break
+    output_sym = get_output_sym(
+        inputs,
+        [
+            access_time,
+            recovery_cycles,
+            ras_cycles,
+            cas_cycles,
+            avg_memory_read_time,
+        ],
+    )
 
     if output_sym:
         result = solve_equation(equation, inputs, output_sym)[0]
@@ -213,11 +202,9 @@ def solve_memory_data_rate(inputs, units: str) -> Tuple[float, str]:
     )
     equation = ((clock_rate / memory_read_time) * memory_width) - memory_data_rate
 
-    output_sym = None
-    for sym in [memory_read_time, memory_width, clock_rate, memory_data_rate]:
-        if str(sym) not in inputs:
-            output_sym = sym
-            break
+    output_sym = get_output_sym(
+        inputs, [memory_read_time, memory_width, clock_rate, memory_data_rate]
+    )
 
     if output_sym:
         result = ByteConverter().convert(
@@ -249,11 +236,36 @@ def solve_cache_avg_read_time(inputs) -> Tuple[float, str]:
         - cache_avg_read_time
     )
 
-    output_sym = None
-    for sym in [p_cache, sram, dram, ras, cas, cache_avg_read_time]:
-        if str(sym) not in inputs:
-            output_sym = sym
-            break
+    output_sym = get_output_sym(
+        inputs, [p_cache, sram, dram, ras, cas, cache_avg_read_time]
+    )
+
+    if output_sym:
+        result = solve_equation(equation, inputs, output_sym)[0]
+        unit = unit_map[str(output_sym)]
+        return result, "{:.5f} {}".format(result, unit)
+    else:
+        raise ValueError("All inputs provided, no variable to solve for")
+
+
+def solve_data_transfer_rate(inputs) -> Tuple[float, str]:
+    unit_map: Dict[str, str] = {
+        "protocol_overhead": "cycles",
+        "bus_width": "bytes",
+        "bus_frequency": "Hz",
+        "data_transfer_rate": "bytes/sec",
+    }
+
+    protocol_overhead, bus_width, bus_frequency, data_transfer_rate = sp.symbols(
+        "protocol_overhead bus_width bus_frequency data_transfer_rate"
+    )
+    equation = (
+        bus_frequency * bus_width / (protocol_overhead + 1)
+    ) - data_transfer_rate
+
+    output_sym = get_output_sym(
+        inputs, [protocol_overhead, bus_width, bus_frequency, data_transfer_rate]
+    )
 
     if output_sym:
         result = solve_equation(equation, inputs, output_sym)[0]

@@ -9,6 +9,7 @@ from src.formulas import (
     solve_branch_prediction,
     solve_cache_avg_read_time,
     solve_clock_freq,
+    solve_data_transfer_rate,
     solve_max_speedup,
     solve_memory_data_rate,
     solve_storage_capacity,
@@ -176,3 +177,56 @@ def test_solve_memory_data_rate(inputs, units, expected_result) -> None:
 )
 def test_solve_cache_avg_read_time(inputs, expected_result) -> None:
     assert float(solve_cache_avg_read_time(inputs)[0]) == expected_result
+
+
+@pytest.mark.parametrize(
+    "inputs, expected_result",
+    [
+        (
+            {
+                "protocol_overhead": 5,
+                "bus_width": ByteConverter().convert(32, "b", "B"),
+                "bus_frequency": HertzConverter().convert(200, "MHz", "Hz"),
+            },
+            133333333.333333,
+        ),
+        (
+            {
+                "protocol_overhead": 5,
+                "bus_width": ByteConverter().convert(32, "b", "B"),
+                "bus_frequency": HertzConverter().convert(240, "MHz", "Hz"),
+                # "data_transfer_rate": 160000000.000000,
+            },
+            160000000.000000,
+        ),
+        (
+            {
+                "protocol_overhead": 5,
+                "bus_width": ByteConverter().convert(32, "b", "B"),
+                # "bus_frequency": HertzConverter().convert(240, "MHz", "Hz"),
+                "data_transfer_rate": 160000000.000000,
+            },
+            HertzConverter().convert(240, "MHz", "Hz"),
+        ),
+        (
+            {
+                "protocol_overhead": 5,
+                # "bus_width": ByteConverter().convert(32, "b", "B"),
+                "bus_frequency": HertzConverter().convert(240, "MHz", "Hz"),
+                "data_transfer_rate": 160000000.000000,
+            },
+            ByteConverter().convert(32, "b", "B"),
+        ),
+        (
+            {
+                # "protocol_overhead": 5,
+                "bus_width": ByteConverter().convert(32, "b", "B"),
+                "bus_frequency": HertzConverter().convert(240, "MHz", "Hz"),
+                "data_transfer_rate": 160000000.000000,
+            },
+            5,
+        ),
+    ],
+)
+def test_solve_data_transfer_rate(inputs, expected_result) -> None:
+    assert float(solve_data_transfer_rate(inputs)[0]) == expected_result
