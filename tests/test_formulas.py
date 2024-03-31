@@ -6,6 +6,7 @@ from src.formulas import (
     HertzConverter,
     TimeConverter,
     solve_address_locations,
+    solve_asynchronous_bus_max_bandwidth,
     solve_avg_memory_read_time,
     solve_branch_prediction,
     solve_cache_avg_read_time,
@@ -378,3 +379,23 @@ def test_solve_data_transfer_efficiency(inputs, expected_result) -> None:
 )
 def test_solve_synchronous_bus_max_bandwidth(inputs, expected_result) -> None:
     assert float(solve_synchronous_bus_max_bandwidth(inputs)[0]) == expected_result
+
+
+@pytest.mark.parametrize(
+    "inputs, expected_result",
+    [
+        (
+            {
+                "bus_width": ByteConverter().convert(10, "B", "B"),
+                "handshake_time": TimeConverter().convert(50, "ns", "s"),
+                "memory_access_time": TimeConverter().convert(250, "ns", "s"),
+                # "maximum_bandwidth": 14035087.7192982,
+            },
+            22222222.2222222,
+        ),
+    ],
+)
+def test_solve_asynchronous_bus_max_bandwidth(inputs, expected_result) -> None:
+    assert float(solve_asynchronous_bus_max_bandwidth(inputs)[0]) == pytest.approx(
+        expected_result
+    )

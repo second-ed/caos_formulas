@@ -356,46 +356,32 @@ def solve_synchronous_bus_max_bandwidth(inputs):
 
 def solve_asynchronous_bus_max_bandwidth(inputs):
     unit_map: Dict[str, str] = {
-        "bus_frequency": "Hz",
         "bus_width": "bytes",
-        "clock_cycle_time": "sec",
-        "ras": "clocks",
-        "cas": "clocks",
-        "send_clocks": "clocks",
+        "handshake_time": "sec",
         "memory_access_time": "sec",
         "maximum_bandwidth": "bytes/sec",
     }
 
     (
-        bus_frequency,
         bus_width,
-        clock_cycle_time,
-        ras,
-        cas,
-        send_clocks,
+        handshake_time,
         memory_access_time,
         maximum_bandwidth,
-    ) = sp.symbols(
-        "bus_frequency bus_width clock_cycle_time ras cas send_clocks memory_access_time maximum_bandwidth"
-    )
+    ) = sp.symbols("bus_width handshake_time memory_access_time maximum_bandwidth")
     equation = (
         bus_width
         / (
-            ((ras + cas) * clock_cycle_time)
-            + memory_access_time
-            + (send_clocks * clock_cycle_time)
+            handshake_time
+            + sp.Max((3 * handshake_time), memory_access_time)
+            + (3 * handshake_time)
         )
     ) - maximum_bandwidth
 
     output_sym = get_output_sym(
         inputs,
         [
-            bus_frequency,
             bus_width,
-            clock_cycle_time,
-            ras,
-            cas,
-            send_clocks,
+            handshake_time,
             memory_access_time,
             maximum_bandwidth,
         ],
