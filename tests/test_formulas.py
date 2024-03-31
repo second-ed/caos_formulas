@@ -9,6 +9,7 @@ from src.formulas import (
     solve_branch_prediction,
     solve_cache_avg_read_time,
     solve_clock_freq,
+    solve_data_transfer_efficiency,
     solve_data_transfer_rate,
     solve_max_speedup,
     solve_memory_data_rate,
@@ -230,3 +231,48 @@ def test_solve_cache_avg_read_time(inputs, expected_result) -> None:
 )
 def test_solve_data_transfer_rate(inputs, expected_result) -> None:
     assert float(solve_data_transfer_rate(inputs)[0]) == expected_result
+
+
+@pytest.mark.parametrize(
+    "inputs, expected_result",
+    [
+        (
+            {
+                "protocol_overhead": 4,
+                "bus_width": ByteConverter().convert(4, "B", "B"),
+                "block_size": ByteConverter().convert(16, "B", "B"),
+                # "data_transfer_efficiency": 0.5,
+            },
+            0.5,
+        ),
+        (
+            {
+                "protocol_overhead": 4,
+                "bus_width": ByteConverter().convert(4, "B", "B"),
+                # "block_size": ByteConverter().convert(16, "B", "B"),
+                "data_transfer_efficiency": 0.5,
+            },
+            16,
+        ),
+        (
+            {
+                "protocol_overhead": 4,
+                # "bus_width": ByteConverter().convert(4, "B", "B"),
+                "block_size": ByteConverter().convert(16, "B", "B"),
+                "data_transfer_efficiency": 0.5,
+            },
+            4,
+        ),
+        (
+            {
+                # "protocol_overhead": 4,
+                "bus_width": ByteConverter().convert(4, "B", "B"),
+                "block_size": ByteConverter().convert(16, "B", "B"),
+                "data_transfer_efficiency": 0.5,
+            },
+            4,
+        ),
+    ],
+)
+def test_solve_data_transfer_efficiency(inputs, expected_result) -> None:
+    assert float(solve_data_transfer_efficiency(inputs)[0]) == expected_result

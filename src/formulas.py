@@ -273,3 +273,30 @@ def solve_data_transfer_rate(inputs) -> Tuple[float, str]:
         return result, "{:.5f} {}".format(result, unit)
     else:
         raise ValueError("All inputs provided, no variable to solve for")
+
+
+def solve_data_transfer_efficiency(inputs) -> Tuple[float, str]:
+    unit_map: Dict[str, str] = {
+        "protocol_overhead": "cycles",
+        "bus_width": "bytes",
+        "block_size": "bytes",
+        "data_transfer_efficiency": "",
+    }
+
+    protocol_overhead, bus_width, block_size, data_transfer_efficiency = sp.symbols(
+        "protocol_overhead bus_width block_size data_transfer_efficiency"
+    )
+    equation = (
+        (block_size / bus_width) / ((block_size / bus_width) + protocol_overhead)
+    ) - data_transfer_efficiency
+
+    output_sym = get_output_sym(
+        inputs, [protocol_overhead, bus_width, block_size, data_transfer_efficiency]
+    )
+
+    if output_sym:
+        result = solve_equation(equation, inputs, output_sym)[0]
+        unit = unit_map[str(output_sym)]
+        return result, "{:.5f} {}".format(result, unit)
+    else:
+        raise ValueError("All inputs provided, no variable to solve for")
