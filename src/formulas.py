@@ -304,6 +304,58 @@ def solve_data_transfer_efficiency(inputs) -> Tuple[float, str]:
 
 def solve_synchronous_bus_max_bandwidth(inputs):
     unit_map: Dict[str, str] = {
+        "bus_width": "bytes",
+        "clock_cycle_time": "sec",
+        "ras": "clocks",
+        "cas": "clocks",
+        "send_clocks": "clocks",
+        "memory_access_time": "sec",
+        "maximum_bandwidth": "bytes/sec",
+    }
+
+    (
+        bus_width,
+        clock_cycle_time,
+        ras,
+        cas,
+        send_clocks,
+        memory_access_time,
+        maximum_bandwidth,
+    ) = sp.symbols(
+        "bus_width clock_cycle_time ras cas send_clocks memory_access_time maximum_bandwidth"
+    )
+    equation = (
+        bus_width
+        / (
+            ((ras + cas) * clock_cycle_time)
+            + memory_access_time
+            + (send_clocks * clock_cycle_time)
+        )
+    ) - maximum_bandwidth
+
+    output_sym = get_output_sym(
+        inputs,
+        [
+            bus_width,
+            clock_cycle_time,
+            ras,
+            cas,
+            send_clocks,
+            memory_access_time,
+            maximum_bandwidth,
+        ],
+    )
+
+    if output_sym:
+        result = solve_equation(equation, inputs, output_sym)[0]
+        unit = unit_map[str(output_sym)]
+        return result, "{:.5f} {}".format(result, unit)
+    else:
+        raise ValueError("All inputs provided, no variable to solve for")
+
+
+def solve_asynchronous_bus_max_bandwidth(inputs):
+    unit_map: Dict[str, str] = {
         "bus_frequency": "Hz",
         "bus_width": "bytes",
         "clock_cycle_time": "sec",
