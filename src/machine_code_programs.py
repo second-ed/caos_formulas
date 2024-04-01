@@ -70,7 +70,7 @@ def JMP_CC(i, condition):
     return condition
 
 
-def HALT(memory):
+def HALT():
     pass
 
 
@@ -79,7 +79,7 @@ def run_program(program, memory) -> None:
     n = len(program)
     while i < n:
         operation, args = program[i]
-        
+
         if operation.__name__ == "HALT":
             break
         if operation.__name__ == "JMP":

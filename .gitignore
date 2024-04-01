@@ -2,6 +2,9 @@
 /.ruff_cache
 /__pycache__
 
+
+scratch.ipynb
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *__pycache__/
