@@ -1,6 +1,6 @@
 import pytest
 
-from src.machine_code_programs import ADD, EQ, GT, LT, MUL, NZ, SUB, ZERO
+from src.machine_code_programs import ADD, DIV, EQ, GT, LDI, LT, MUL, NZ, SUB, ZERO
 
 
 @pytest.mark.parametrize(
@@ -69,6 +69,7 @@ def test_NZ(x, expected_result) -> None:
     [
         ([2, 3, 0], 0, 1, 2, [2, 3, 5]),
         ([2, 3, 0], 0, 1, 1, [2, 5, 0]),
+        ([2, 3, 0], 0, 1, 0, [5, 3, 0]),
     ],
 )
 def test_ADD(memory, Rx, Ry, Rz, expected_result) -> None:
@@ -81,6 +82,7 @@ def test_ADD(memory, Rx, Ry, Rz, expected_result) -> None:
     [
         ([2, 3, 0], 0, 1, 2, [2, 3, -1]),
         ([2, 3, 0], 0, 1, 1, [2, -1, 0]),
+        ([2, 3, 0], 0, 1, 0, [-1, 3, 0]),
     ],
 )
 def test_SUB(memory, Rx, Ry, Rz, expected_result) -> None:
@@ -93,6 +95,7 @@ def test_SUB(memory, Rx, Ry, Rz, expected_result) -> None:
     [
         ([2, 3, 0], 0, 1, 2, [2, 3, 6]),
         ([2, 3, 0], 0, 1, 1, [2, 6, 0]),
+        ([2, 3, 0], 0, 1, 0, [6, 3, 0]),
     ],
 )
 def test_MUL(memory, Rx, Ry, Rz, expected_result) -> None:
@@ -100,24 +103,30 @@ def test_MUL(memory, Rx, Ry, Rz, expected_result) -> None:
     assert memory == expected_result
 
 
-# @pytest.mark.parametrize(
-#     "memory, Rx, Ry, Rz, expected_result",
-#     [
-#         (memory, Rx, Ry, Rz, expected_result),
-#     ]
-# )
-# def test_DIV(memory, Rx, Ry, Rz, expected_result) -> None:
-#     assert DIV(memory, Rx, Ry, Rz) == expected_result
+@pytest.mark.parametrize(
+    "memory, Rx, Ry, Rz, expected_result",
+    [
+        ([12, 3, 0], 0, 1, 2, [12, 3, 4]),
+        ([12, 3, 0], 0, 1, 1, [12, 4, 0]),
+        ([12, 3, 0], 0, 1, 0, [4, 3, 0]),
+    ],
+)
+def test_DIV(memory, Rx, Ry, Rz, expected_result) -> None:
+    DIV(memory, Rx, Ry, Rz)
+    assert memory == expected_result
 
 
-# @pytest.mark.parametrize(
-#     "memory, Rx, nn, expected_result",
-#     [
-#         (memory, Rx, nn, expected_result),
-#     ]
-# )
-# def test_LDI(memory, Rx, nn, expected_result) -> None:
-#     assert LDI(memory, Rx, nn) == expected_result
+@pytest.mark.parametrize(
+    "memory, Rx, nn, expected_result",
+    [
+        ([0, 0, 0], 0, 1, [1, 0, 0]),
+        ([0, 0, 0], 1, 2, [0, 2, 0]),
+        ([0, 0, 0], 2, 4, [0, 0, 4]),
+    ],
+)
+def test_LDI(memory, Rx, nn, expected_result) -> None:
+    LDI(memory, Rx, nn)
+    assert memory == expected_result
 
 
 # @pytest.mark.parametrize(
