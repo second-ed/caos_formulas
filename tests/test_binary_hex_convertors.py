@@ -16,6 +16,11 @@ def test_st_num_to_binary(num) -> None:
     assert num_to_binary(num, use_pad=False) == np.binary_repr(num)
 
 
+@given(st.integers())
+def test_st_binary(num) -> None:
+    assert binary_to_num(num_to_binary(num)) == num
+
+
 @pytest.mark.parametrize(
     "input, expected_output",
     [
@@ -95,8 +100,8 @@ def test_binary_to_num(input, expected_output) -> None:
 
 
 @given(st.integers())
-def test_st_num_to_hexadecimal(num) -> None:
-    assert num_to_hexadecimal(num) == hex(num).upper()
+def test_st_hexadecimal(num) -> None:
+    assert hexadecimal_to_num(num_to_hexadecimal(num)) == num
 
 
 @pytest.mark.parametrize(
