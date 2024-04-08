@@ -45,6 +45,15 @@ def get_output_sym(inputs, symbols):
     return None
 
 
+def get_result(inputs, equation, output_sym, unit_map) -> Tuple[float, str]:
+    if output_sym:
+        result = solve_equation(equation, inputs, output_sym)[0]
+        unit = unit_map[str(output_sym)]
+        return result, f"{result :.5f} {unit}"
+    else:
+        raise ValueError("All inputs provided, no variable to solve for")
+
+
 def solve_clock_freq(inputs: Dict) -> Tuple[float, str]:
     unit_map: Dict[str, str] = {"t": "s", "f": "Hz"}
 
@@ -53,12 +62,7 @@ def solve_clock_freq(inputs: Dict) -> Tuple[float, str]:
 
     output_sym = get_output_sym(inputs, [t, f])
 
-    if output_sym:
-        result = solve_equation(equation, inputs, output_sym)[0]
-        unit = unit_map[str(output_sym)]
-        return result, f"{result :.5f} {unit}"
-    else:
-        raise ValueError("All inputs provided, no variable to solve for")
+    return get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_max_speedup(inputs: Dict) -> Tuple[float, str]:
@@ -69,12 +73,7 @@ def solve_max_speedup(inputs: Dict) -> Tuple[float, str]:
 
     output_sym = get_output_sym(inputs, [max_speedup, P])
 
-    if output_sym:
-        result = solve_equation(equation, inputs, output_sym)[0]
-        unit = unit_map[str(output_sym)]
-        return result, f"{result :.5f} {unit}"
-    else:
-        raise ValueError("All inputs provided, no variable to solve for")
+    return get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_true_speedup(inputs: Dict) -> Tuple[float, str]:
@@ -85,12 +84,7 @@ def solve_true_speedup(inputs: Dict) -> Tuple[float, str]:
 
     output_sym = get_output_sym(inputs, [true_speedup, P, n])
 
-    if output_sym:
-        result = solve_equation(equation, inputs, output_sym)[0]
-        unit = unit_map[str(output_sym)]
-        return result, f"{result :.5f} {unit}"
-    else:
-        raise ValueError("All inputs provided, no variable to solve for")
+    return get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_branch_prediction(inputs: Dict) -> Tuple[float, str]:
@@ -111,12 +105,7 @@ def solve_branch_prediction(inputs: Dict) -> Tuple[float, str]:
         inputs, [cycles_saved, cycles_cost, p_correct, p_incorrect, total_savings]
     )
 
-    if output_sym:
-        result = solve_equation(equation, inputs, output_sym)[0]
-        unit = unit_map[str(output_sym)]
-        return result, f"{result :.5f} {unit}"
-    else:
-        raise ValueError("All inputs provided, no variable to solve for")
+    return get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_address_locations(inputs) -> Tuple[float, str]:
@@ -130,12 +119,7 @@ def solve_address_locations(inputs) -> Tuple[float, str]:
 
     output_sym = get_output_sym(inputs, [address_lines, address_locations])
 
-    if output_sym:
-        result = solve_equation(equation, inputs, output_sym)[0]
-        unit = unit_map[str(output_sym)]
-        return result, f"{result} {unit}"
-    else:
-        raise ValueError("All inputs provided, no variable to solve for")
+    return get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_storage_capacity(inputs) -> Tuple[float, str]:
@@ -181,12 +165,7 @@ def solve_avg_memory_read_time(inputs) -> Tuple[float, str]:
         ],
     )
 
-    if output_sym:
-        result = solve_equation(equation, inputs, output_sym)[0]
-        unit = unit_map[str(output_sym)]
-        return result, f"{result :.5f} {unit}"
-    else:
-        raise ValueError("All inputs provided, no variable to solve for")
+    return get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_memory_data_rate(inputs, units: str) -> Tuple[float, str]:
@@ -232,7 +211,6 @@ def solve_cache_avg_read_time(inputs) -> Tuple[float, str]:
     equation = (
         (p_cache * (sram + ras + cas))
         + ((1 - p_cache) * (sram + dram + ras + cas))
-        # + ((1 - p_cache) * dram)
         - cache_avg_read_time
     )
 
@@ -240,12 +218,7 @@ def solve_cache_avg_read_time(inputs) -> Tuple[float, str]:
         inputs, [p_cache, sram, dram, ras, cas, cache_avg_read_time]
     )
 
-    if output_sym:
-        result = solve_equation(equation, inputs, output_sym)[0]
-        unit = unit_map[str(output_sym)]
-        return result, "{:.5f} {}".format(result, unit)
-    else:
-        raise ValueError("All inputs provided, no variable to solve for")
+    return get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_data_transfer_rate(inputs) -> Tuple[float, str]:
@@ -267,12 +240,7 @@ def solve_data_transfer_rate(inputs) -> Tuple[float, str]:
         inputs, [protocol_overhead, bus_width, bus_frequency, data_transfer_rate]
     )
 
-    if output_sym:
-        result = solve_equation(equation, inputs, output_sym)[0]
-        unit = unit_map[str(output_sym)]
-        return result, "{:.5f} {}".format(result, unit)
-    else:
-        raise ValueError("All inputs provided, no variable to solve for")
+    return get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_data_transfer_efficiency(inputs) -> Tuple[float, str]:
@@ -294,15 +262,10 @@ def solve_data_transfer_efficiency(inputs) -> Tuple[float, str]:
         inputs, [protocol_overhead, bus_width, block_size, data_transfer_efficiency]
     )
 
-    if output_sym:
-        result = solve_equation(equation, inputs, output_sym)[0]
-        unit = unit_map[str(output_sym)]
-        return result, "{:.5f} {}".format(result, unit)
-    else:
-        raise ValueError("All inputs provided, no variable to solve for")
+    return get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_synchronous_bus_max_bandwidth(inputs):
+def solve_synchronous_bus_max_bandwidth(inputs) -> Tuple[float, str]:
     unit_map: Dict[str, str] = {
         "bus_width": "bytes",
         "clock_cycle_time": "sec",
@@ -346,15 +309,10 @@ def solve_synchronous_bus_max_bandwidth(inputs):
         ],
     )
 
-    if output_sym:
-        result = solve_equation(equation, inputs, output_sym)[0]
-        unit = unit_map[str(output_sym)]
-        return result, "{:.5f} {}".format(result, unit)
-    else:
-        raise ValueError("All inputs provided, no variable to solve for")
+    return get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_asynchronous_bus_max_bandwidth(inputs):
+def solve_asynchronous_bus_max_bandwidth(inputs) -> Tuple[float, str]:
     unit_map: Dict[str, str] = {
         "bus_width": "bytes",
         "handshake_time": "sec",
@@ -387,9 +345,34 @@ def solve_asynchronous_bus_max_bandwidth(inputs):
         ],
     )
 
-    if output_sym:
-        result = solve_equation(equation, inputs, output_sym)[0]
-        unit = unit_map[str(output_sym)]
-        return result, "{:.5f} {}".format(result, unit)
-    else:
-        raise ValueError("All inputs provided, no variable to solve for")
+    return get_result(inputs, equation, output_sym, unit_map)
+
+
+def solve_probability_of_failure(inputs) -> Tuple[float, str]:
+    unit_map: Dict[str, str] = {
+        "P": "",
+        "n": "",
+        "P_failure": "",
+    }
+
+    P, n, P_failure = sp.symbols("P n P_failure")
+    equation = (P**n) - P_failure
+
+    output_sym = get_output_sym(inputs, [P, n, P_failure])
+
+    return get_result(inputs, equation, output_sym, unit_map)
+
+
+def solve_probability_of_no_failure(inputs) -> Tuple[float, str]:
+    unit_map: Dict[str, str] = {
+        "P": "",
+        "n": "",
+        "P_failure": "",
+    }
+
+    P, n, P_failure = sp.symbols("P n P_failure")
+    equation = ((1 - P) ** n) - P_failure
+
+    output_sym = get_output_sym(inputs, [P, n, P_failure])
+
+    return get_result(inputs, equation, output_sym, unit_map)
