@@ -2,6 +2,8 @@ import pytest
 
 from src.machine_code_programs import (
     ADD,
+    CMP,
+    CMP_NN,
     DEC,
     DIV,
     EQ,
@@ -192,24 +194,29 @@ def test_DEC(memory, Rx, expected_result) -> None:
     assert memory == expected_result
 
 
-# @pytest.mark.parametrize(
-#     "memory, Rx, Ry, comparison_op, expected_result",
-#     [
-#         (memory, Rx, Ry, comparison_op, expected_result),
-#     ]
-# )
-# def test_CMP(memory, Rx, Ry, comparison_op, expected_result) -> None:
-#     assert CMP(memory, Rx, Ry, comparison_op) == expected_result
+@pytest.mark.parametrize(
+    "memory, Rx, Ry, comparison_op, expected_result",
+    [
+        ([1, 0], 0, 1, GT, True),
+        ([1, 0], 1, 0, GT, False),
+        ([1, 0], 0, 1, LT, False),
+        ([1, 0], 1, 0, LT, True),
+    ],
+)
+def test_CMP(memory, Rx, Ry, comparison_op, expected_result) -> None:
+    assert CMP(memory, Rx, Ry, comparison_op) == expected_result
 
 
-# @pytest.mark.parametrize(
-#     "memory, Rx, nn, comparison_op, expected_result",
-#     [
-#         (memory, Rx, nn, comparison_op, expected_result),
-#     ]
-# )
-# def test_CMP_NN(memory, Rx, nn, comparison_op, expected_result) -> None:
-#     assert CMP_NN(memory, Rx, nn, comparison_op) == expected_result
+@pytest.mark.parametrize(
+    "memory, Rx, nn, comparison_op, expected_result",
+    [
+        ([0, 0], 0, 1, GT, False),
+        ([0, 1], 1, 1, GT, False),
+        ([0, 2], 1, 1, GT, True),
+    ],
+)
+def test_CMP_NN(memory, Rx, nn, comparison_op, expected_result) -> None:
+    assert CMP_NN(memory, Rx, nn, comparison_op) == expected_result
 
 
 # @pytest.mark.parametrize(

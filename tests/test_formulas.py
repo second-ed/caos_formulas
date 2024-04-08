@@ -15,6 +15,8 @@ from src.formulas import (
     solve_data_transfer_rate,
     solve_max_speedup,
     solve_memory_data_rate,
+    solve_probability_of_failure,
+    solve_probability_of_no_failure,
     solve_storage_capacity,
     solve_synchronous_bus_max_bandwidth,
     solve_true_speedup,
@@ -397,5 +399,54 @@ def test_solve_synchronous_bus_max_bandwidth(inputs, expected_result) -> None:
 )
 def test_solve_asynchronous_bus_max_bandwidth(inputs, expected_result) -> None:
     assert float(solve_asynchronous_bus_max_bandwidth(inputs)[0]) == pytest.approx(
+        expected_result
+    )
+
+
+@pytest.mark.parametrize(
+    "inputs, expected_result",
+    [
+        (
+            {"n": 2, "P_failure": 0.000025},
+            -0.005,
+        ),
+        (
+            {"P": 0.005, "P_failure": 0.000025},
+            2,
+        ),
+        (
+            {
+                "P": 0.005,
+                "n": 2,
+            },
+            0.000025,
+        ),
+    ],
+)
+def test_solve_probability_of_failure(inputs, expected_result) -> None:
+    assert float(solve_probability_of_failure(inputs)[0]) == pytest.approx(
+        expected_result
+    )
+
+
+@pytest.mark.parametrize(
+    "inputs, expected_result",
+    [
+        (
+            {"n": 3, "P_failure": 0.985074875},
+            0.005,
+        ),
+        (
+            {"P": 0.005, "P_failure": 0.985074875},
+            3,
+        ),
+        (
+            {"P": 0.005, "n": 3},
+            0.985074875,
+        ),
+    ],
+)
+def test_solve_probability_of_no_failure(inputs, expected_result) -> None:
+    assert float(solve_probability_of_no_failure(inputs)[0]) == pytest.approx(
         expected_result
     )
