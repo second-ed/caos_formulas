@@ -36,7 +36,7 @@ def solve_equation(equation, inputs, output_sym):
     return sp.solve(equation.subs(inputs), output_sym)
 
 
-def get_output_sym(inputs, symbols):
+def _get_output_sym(inputs, symbols):
     for sym in symbols:
         if str(sym) not in inputs:
             output_sym = sym
@@ -44,7 +44,7 @@ def get_output_sym(inputs, symbols):
     return None
 
 
-def get_result(inputs, equation, output_sym, unit_map) -> Tuple[float, str]:
+def _get_result(inputs, equation, output_sym, unit_map) -> Tuple[float, str]:
     if output_sym:
         result = solve_equation(equation, inputs, output_sym)[0]
         unit = unit_map[str(output_sym)]
@@ -59,9 +59,9 @@ def solve_clock_freq(inputs: Dict) -> Tuple[float, str]:
     t, f = sp.symbols("t f")
     equation = 1 / t - f
 
-    output_sym = get_output_sym(inputs, [t, f])
+    output_sym = _get_output_sym(inputs, [t, f])
 
-    return get_result(inputs, equation, output_sym, unit_map)
+    return _get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_max_speedup(inputs: Dict) -> Tuple[float, str]:
@@ -70,9 +70,9 @@ def solve_max_speedup(inputs: Dict) -> Tuple[float, str]:
     max_speedup, P = sp.symbols("max_speedup P")
     equation = 1 / (1 - P) - max_speedup
 
-    output_sym = get_output_sym(inputs, [max_speedup, P])
+    output_sym = _get_output_sym(inputs, [max_speedup, P])
 
-    return get_result(inputs, equation, output_sym, unit_map)
+    return _get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_true_speedup(inputs: Dict) -> Tuple[float, str]:
@@ -81,9 +81,9 @@ def solve_true_speedup(inputs: Dict) -> Tuple[float, str]:
     true_speedup, P, n = sp.symbols("true_speedup P n")
     equation = 1 / ((1 - P) + (P / n)) - true_speedup
 
-    output_sym = get_output_sym(inputs, [true_speedup, P, n])
+    output_sym = _get_output_sym(inputs, [true_speedup, P, n])
 
-    return get_result(inputs, equation, output_sym, unit_map)
+    return _get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_branch_prediction(inputs: Dict) -> Tuple[float, str]:
@@ -100,11 +100,11 @@ def solve_branch_prediction(inputs: Dict) -> Tuple[float, str]:
     )
     equation = (p_correct * cycles_saved) - (p_incorrect * cycles_cost) - total_savings
 
-    output_sym = get_output_sym(
+    output_sym = _get_output_sym(
         inputs, [cycles_saved, cycles_cost, p_correct, p_incorrect, total_savings]
     )
 
-    return get_result(inputs, equation, output_sym, unit_map)
+    return _get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_address_locations(inputs) -> Tuple[float, str]:
@@ -116,9 +116,9 @@ def solve_address_locations(inputs) -> Tuple[float, str]:
     address_lines, address_locations = sp.symbols("address_lines address_locations")
     equation = (2**address_lines) - address_locations
 
-    output_sym = get_output_sym(inputs, [address_lines, address_locations])
+    output_sym = _get_output_sym(inputs, [address_lines, address_locations])
 
-    return get_result(inputs, equation, output_sym, unit_map)
+    return _get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_storage_capacity(inputs) -> Tuple[float, str]:
@@ -153,7 +153,7 @@ def solve_avg_memory_read_time(inputs) -> Tuple[float, str]:
         access_time + recovery_cycles + ras_cycles + cas_cycles - avg_memory_read_time
     )
 
-    output_sym = get_output_sym(
+    output_sym = _get_output_sym(
         inputs,
         [
             access_time,
@@ -164,7 +164,7 @@ def solve_avg_memory_read_time(inputs) -> Tuple[float, str]:
         ],
     )
 
-    return get_result(inputs, equation, output_sym, unit_map)
+    return _get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_memory_data_rate(inputs) -> Tuple[float, str]:
@@ -180,11 +180,11 @@ def solve_memory_data_rate(inputs) -> Tuple[float, str]:
     )
     equation = ((clock_rate / memory_read_time) * memory_width) - memory_data_rate
 
-    output_sym = get_output_sym(
+    output_sym = _get_output_sym(
         inputs, [memory_read_time, memory_width, clock_rate, memory_data_rate]
     )
 
-    return get_result(inputs, equation, output_sym, unit_map)
+    return _get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_cache_avg_read_time(inputs) -> Tuple[float, str]:
@@ -206,11 +206,11 @@ def solve_cache_avg_read_time(inputs) -> Tuple[float, str]:
         - cache_avg_read_time
     )
 
-    output_sym = get_output_sym(
+    output_sym = _get_output_sym(
         inputs, [p_cache, sram, dram, ras, cas, cache_avg_read_time]
     )
 
-    return get_result(inputs, equation, output_sym, unit_map)
+    return _get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_data_transfer_rate(inputs) -> Tuple[float, str]:
@@ -228,11 +228,11 @@ def solve_data_transfer_rate(inputs) -> Tuple[float, str]:
         bus_frequency * bus_width / (protocol_overhead + 1)
     ) - data_transfer_rate
 
-    output_sym = get_output_sym(
+    output_sym = _get_output_sym(
         inputs, [protocol_overhead, bus_width, bus_frequency, data_transfer_rate]
     )
 
-    return get_result(inputs, equation, output_sym, unit_map)
+    return _get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_data_transfer_efficiency(inputs) -> Tuple[float, str]:
@@ -250,11 +250,11 @@ def solve_data_transfer_efficiency(inputs) -> Tuple[float, str]:
         (block_size / bus_width) / ((block_size / bus_width) + protocol_overhead)
     ) - data_transfer_efficiency
 
-    output_sym = get_output_sym(
+    output_sym = _get_output_sym(
         inputs, [protocol_overhead, bus_width, block_size, data_transfer_efficiency]
     )
 
-    return get_result(inputs, equation, output_sym, unit_map)
+    return _get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_synchronous_bus_max_bandwidth(inputs) -> Tuple[float, str]:
@@ -288,7 +288,7 @@ def solve_synchronous_bus_max_bandwidth(inputs) -> Tuple[float, str]:
         )
     ) - maximum_bandwidth
 
-    output_sym = get_output_sym(
+    output_sym = _get_output_sym(
         inputs,
         [
             bus_width,
@@ -301,7 +301,7 @@ def solve_synchronous_bus_max_bandwidth(inputs) -> Tuple[float, str]:
         ],
     )
 
-    return get_result(inputs, equation, output_sym, unit_map)
+    return _get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_asynchronous_bus_max_bandwidth(inputs) -> Tuple[float, str]:
@@ -327,7 +327,7 @@ def solve_asynchronous_bus_max_bandwidth(inputs) -> Tuple[float, str]:
         )
     ) - maximum_bandwidth
 
-    output_sym = get_output_sym(
+    output_sym = _get_output_sym(
         inputs,
         [
             bus_width,
@@ -337,7 +337,7 @@ def solve_asynchronous_bus_max_bandwidth(inputs) -> Tuple[float, str]:
         ],
     )
 
-    return get_result(inputs, equation, output_sym, unit_map)
+    return _get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_probability_of_failure(inputs) -> Tuple[float, str]:
@@ -350,9 +350,9 @@ def solve_probability_of_failure(inputs) -> Tuple[float, str]:
     P, n, P_failure = sp.symbols("P n P_failure")
     equation = (P**n) - P_failure
 
-    output_sym = get_output_sym(inputs, [P, n, P_failure])
+    output_sym = _get_output_sym(inputs, [P, n, P_failure])
 
-    return get_result(inputs, equation, output_sym, unit_map)
+    return _get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_probability_of_no_failure(inputs) -> Tuple[float, str]:
@@ -365,6 +365,6 @@ def solve_probability_of_no_failure(inputs) -> Tuple[float, str]:
     P, n, P_failure = sp.symbols("P n P_failure")
     equation = ((1 - P) ** n) - P_failure
 
-    output_sym = get_output_sym(inputs, [P, n, P_failure])
+    output_sym = _get_output_sym(inputs, [P, n, P_failure])
 
-    return get_result(inputs, equation, output_sym, unit_map)
+    return _get_result(inputs, equation, output_sym, unit_map)

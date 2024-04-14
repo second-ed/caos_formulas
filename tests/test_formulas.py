@@ -6,7 +6,8 @@ from src.formulas import (
     ByteConverter,
     HertzConverter,
     TimeConverter,
-    get_output_sym,
+    _get_output_sym,
+    _get_result,
     solve_address_locations,
     solve_asynchronous_bus_max_bandwidth,
     solve_avg_memory_read_time,
@@ -49,7 +50,12 @@ def test_raises_converter(converter, from_unit, to_unit):
     ],
 )
 def test_get_output_sym(inputs, symbols, expected_result):
-    assert get_output_sym(inputs, symbols) == expected_result
+    assert _get_output_sym(inputs, symbols) == expected_result
+
+
+def test_raises_get_result():
+    with pytest.raises(ValueError):
+        _get_result({}, [], None, {})
 
 
 @pytest.mark.parametrize(
