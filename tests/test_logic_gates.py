@@ -1,5 +1,6 @@
 from typing import Callable, List, Tuple
 
+import pandas as pd
 import pytest
 
 from src.logic_gates import (
@@ -8,6 +9,7 @@ from src.logic_gates import (
     full_adder,
     generate_inputs,
     get_logic_outputs,
+    get_results_df,
     half_adder,
     inverter_gate,
     nand_gate,
@@ -153,3 +155,19 @@ def test_get_logic_outputs(
     inputs: List[Tuple], func: Callable, expected_output: List[Tuple]
 ) -> None:
     assert get_logic_outputs(inputs, func) == expected_output
+
+
+@pytest.mark.parametrize(
+    "func, col, expected_output",
+    [
+        (
+            and_into_inverse,
+            ["z"],
+            pd.DataFrame().from_dict(
+                {"x": [0, 0, 1, 1], "y": [0, 1, 0, 1], "z": [1, 1, 1, 0]}
+            ),
+        ),
+    ],
+)
+def test_get_results_df(func: Callable, col: List[str], expected_output: pd.DataFrame):
+    assert all(get_results_df(func, col).eq(expected_output))
