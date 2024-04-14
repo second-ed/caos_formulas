@@ -18,7 +18,6 @@ class ByteConverter:
     def convert(value, from_unit, to_unit):
         if from_unit not in BYTES_MAP or to_unit not in BYTES_MAP:
             raise ValueError("Invalid units provided")
-
         return value * BYTES_MAP[from_unit] / BYTES_MAP[to_unit]
 
 

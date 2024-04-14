@@ -1,10 +1,12 @@
 import numpy as np
+import sympy as sp
 import pytest
 
 from src.formulas import (
     ByteConverter,
     HertzConverter,
     TimeConverter,
+    get_output_sym,
     solve_address_locations,
     solve_asynchronous_bus_max_bandwidth,
     solve_avg_memory_read_time,
@@ -21,6 +23,33 @@ from src.formulas import (
     solve_synchronous_bus_max_bandwidth,
     solve_true_speedup,
 )
+
+
+@pytest.mark.parametrize(
+    "converter, from_unit, to_unit",
+    [
+        (ByteConverter(), "GB", "blah"),
+        (ByteConverter(), "blah", "MB"),
+        (HertzConverter(), "GHz", "blah"),
+        (HertzConverter(), "blah", "MHz"),
+        (TimeConverter(), "ms", "blah"),
+        (TimeConverter(), "blah", "µs"),
+    ],
+)
+def test_raises_converter(converter, from_unit, to_unit):
+    with pytest.raises(ValueError):
+        converter.convert(1, from_unit, to_unit)
+
+
+@pytest.mark.parametrize(
+    "inputs, symbols, expected_result",
+    [
+        ({"a": 1, "b": 2, "c": 3}, [*sp.symbols("a b c")], None),
+        ({"a": 1, "b": 2}, [*sp.symbols("a b c")], sp.Symbol("c")),
+    ],
+)
+def test_get_output_sym(inputs, symbols, expected_result):
+    assert get_output_sym(inputs, symbols) == expected_result
 
 
 @pytest.mark.parametrize(

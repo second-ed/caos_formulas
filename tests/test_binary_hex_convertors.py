@@ -180,3 +180,15 @@ def test_num_to_hexadecimal(input, expected_output) -> None:
 )
 def test_hexadecimal_to_num(input, expected_output) -> None:
     assert hexadecimal_to_num(input) == expected_output
+
+
+@pytest.mark.parametrize(
+    "input",
+    [
+        ("0XYEAH"),
+        ("0X34!"),
+    ],
+)
+def test_raises_hexadecimal_to_num(input):
+    with pytest.raises(ValueError):
+        hexadecimal_to_num(input)
