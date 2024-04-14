@@ -149,7 +149,7 @@ def test_solve_avg_memory_read_time(inputs, expected_result) -> None:
 
 
 @pytest.mark.parametrize(
-    "inputs, units, expected_result",
+    "inputs, expected_result",
     [
         (
             {
@@ -157,13 +157,12 @@ def test_solve_avg_memory_read_time(inputs, expected_result) -> None:
                 "memory_width": ByteConverter().convert(32, "b", "B"),
                 "clock_rate": HertzConverter().convert(1, "GHz", "Hz"),
             },
-            "MB",
-            762.939453125000,
+            800000000,
         ),
     ],
 )
-def test_solve_memory_data_rate(inputs, units, expected_result) -> None:
-    assert float(solve_memory_data_rate(inputs, units)[0]) == expected_result
+def test_solve_memory_data_rate(inputs, expected_result) -> None:
+    assert float(solve_memory_data_rate(inputs)[0]) == expected_result
 
 
 @pytest.mark.parametrize(

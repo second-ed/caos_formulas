@@ -168,12 +168,12 @@ def solve_avg_memory_read_time(inputs) -> Tuple[float, str]:
     return get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_memory_data_rate(inputs, units: str) -> Tuple[float, str]:
+def solve_memory_data_rate(inputs) -> Tuple[float, str]:
     unit_map: Dict[str, str] = {
         "memory_read_time": "clock read time",
         "memory_width": "bits",
         "clock_rate": "Hz",
-        "memory_data_rate": f"{units} per second",
+        "memory_data_rate": "bytes per second",
     }
 
     memory_read_time, memory_width, clock_rate, memory_data_rate = sp.symbols(
@@ -185,14 +185,7 @@ def solve_memory_data_rate(inputs, units: str) -> Tuple[float, str]:
         inputs, [memory_read_time, memory_width, clock_rate, memory_data_rate]
     )
 
-    if output_sym:
-        result = ByteConverter().convert(
-            solve_equation(equation, inputs, output_sym)[0], "B", units
-        )
-        unit = unit_map[str(output_sym)]
-        return result, f"{result :.5f} {unit}"
-    else:
-        raise ValueError("All inputs provided, no variable to solve for")
+    return get_result(inputs, equation, output_sym, unit_map)
 
 
 def solve_cache_avg_read_time(inputs) -> Tuple[float, str]:
