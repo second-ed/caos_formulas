@@ -16,6 +16,7 @@ from src.formulas import (
     solve_clock_freq,
     solve_data_transfer_efficiency,
     solve_data_transfer_rate,
+    solve_gustafsons_law,
     solve_max_speedup,
     solve_memory_data_rate,
     solve_probability_of_failure,
@@ -86,13 +87,25 @@ def test_solve_max_speedup(inputs, expected_result) -> None:
 @pytest.mark.parametrize(
     "inputs, expected_result",
     [
-        ({"P": 0.5, "n": 3}, 1.5000000),
+        ({"P": 0.5, "n": 3}, 1.5),
         ({"P": 0.5, "true_speedup": 1.5}, 3),
         ({"true_speedup": 1.5, "n": 3}, 0.5),
     ],
 )
 def test_solve_true_speedup(inputs, expected_result) -> None:
     assert float(solve_true_speedup(inputs)[0]) == expected_result
+
+
+@pytest.mark.parametrize(
+    "inputs, expected_result",
+    [
+        ({"P": 0.5, "n": 4}, 2.5000000),
+        ({"P": 0.5, "speedup": 2.5}, 4),
+        ({"speedup": 2.5, "n": 4}, 0.5),
+    ],
+)
+def test_solve_gustafsons_law(inputs, expected_result) -> None:
+    assert float(solve_gustafsons_law(inputs)[0]) == expected_result
 
 
 @pytest.mark.parametrize(

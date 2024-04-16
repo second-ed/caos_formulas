@@ -86,6 +86,20 @@ def solve_true_speedup(inputs: Dict) -> Tuple[float, str]:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
+def solve_gustafsons_law(inputs: Dict) -> Tuple[float, str]:
+    unit_map: Dict[str, str] = {
+        "speedup": " speed up of n processors",
+        "P": " proportion that can be parallelized",
+        "n": " processors",
+    }
+
+    speedup, P, n = sp.symbols("speedup P n")
+    equation = (n + (P * (1 - n))) - speedup
+
+    output_sym = _get_output_sym(inputs, [speedup, P, n])
+    return _get_result(inputs, equation, output_sym, unit_map)
+
+
 def solve_branch_prediction(inputs: Dict) -> Tuple[float, str]:
     unit_map: Dict[str, str] = {
         "cycles_saved": "cycles",
