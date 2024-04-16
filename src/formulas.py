@@ -122,6 +122,24 @@ def solve_branch_prediction(inputs: Dict) -> float:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
+def solve_reads_per_sec(inputs: Dict) -> float:
+    unit_map: Dict[str, str] = {
+        "reads_per_sec": "reads per sec",
+        "freq": "Hz",
+        "clocks_per_read": "clocks",
+    }
+
+    reads_per_sec, freq, clocks_per_read = sp.symbols(
+        "reads_per_sec freq clocks_per_read"
+    )
+    equation = (freq / clocks_per_read) - reads_per_sec
+
+    output_sym = _get_output_sym(
+        inputs, [reads_per_sec, freq, clocks_per_read]
+    )
+    return _get_result(inputs, equation, output_sym, unit_map)
+
+
 def solve_address_locations(inputs) -> float:
     unit_map = {
         "address_lines": "bits",
