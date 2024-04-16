@@ -32,7 +32,7 @@ class TimeConverter:
         return target_value
 
 
-def solve_equation(equation, inputs, output_sym):
+def _solve_equation(equation, inputs, output_sym):
     return sp.solve(equation.subs(inputs), output_sym)
 
 
@@ -46,7 +46,7 @@ def _get_output_sym(inputs, symbols):
 
 def _get_result(inputs, equation, output_sym, unit_map) -> Tuple[float, str]:
     if output_sym:
-        result = solve_equation(equation, inputs, output_sym)[0]
+        result = _solve_equation(equation, inputs, output_sym)[0]
         unit = unit_map[str(output_sym)]
         return result, f"{result :.5f} {unit}"
     else:
