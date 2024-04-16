@@ -1,4 +1,4 @@
-from typing import Dict, Tuple
+from typing import Dict
 
 import sympy as sp
 
@@ -44,16 +44,17 @@ def _get_output_sym(inputs, symbols):
     return None
 
 
-def _get_result(inputs, equation, output_sym, unit_map) -> Tuple[float, str]:
+def _get_result(inputs, equation, output_sym, unit_map) -> float:
     if output_sym:
         result = _solve_equation(equation, inputs, output_sym)[0]
         unit = unit_map[str(output_sym)]
-        return result, f"{result :.5f} {unit}"
+        print(f"{result :.5f} {unit}")
+        return result
     else:
         raise ValueError("All inputs provided, no variable to solve for")
 
 
-def solve_clock_freq(inputs: Dict) -> Tuple[float, str]:
+def solve_clock_freq(inputs: Dict) -> float:
     unit_map: Dict[str, str] = {"t": "s", "f": "Hz"}
 
     t, f = sp.symbols("t f")
@@ -64,7 +65,7 @@ def solve_clock_freq(inputs: Dict) -> Tuple[float, str]:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_max_speedup(inputs: Dict) -> Tuple[float, str]:
+def solve_max_speedup(inputs: Dict) -> float:
     unit_map: Dict[str, str] = {"max_speedup": "", "P": ""}
 
     max_speedup, P = sp.symbols("max_speedup P")
@@ -75,7 +76,7 @@ def solve_max_speedup(inputs: Dict) -> Tuple[float, str]:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_true_speedup(inputs: Dict) -> Tuple[float, str]:
+def solve_true_speedup(inputs: Dict) -> float:
     unit_map: Dict[str, str] = {"true_speedup": "", "P": "", "n": ""}
 
     true_speedup, P, n = sp.symbols("true_speedup P n")
@@ -86,7 +87,7 @@ def solve_true_speedup(inputs: Dict) -> Tuple[float, str]:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_gustafsons_law(inputs: Dict) -> Tuple[float, str]:
+def solve_gustafsons_law(inputs: Dict) -> float:
     unit_map: Dict[str, str] = {
         "speedup": " speed up of n processors",
         "P": " proportion that can be parallelized",
@@ -100,7 +101,7 @@ def solve_gustafsons_law(inputs: Dict) -> Tuple[float, str]:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_branch_prediction(inputs: Dict) -> Tuple[float, str]:
+def solve_branch_prediction(inputs: Dict) -> float:
     unit_map: Dict[str, str] = {
         "cycles_saved": "cycles",
         "cycles_cost": "cycles",
@@ -121,7 +122,7 @@ def solve_branch_prediction(inputs: Dict) -> Tuple[float, str]:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_address_locations(inputs) -> Tuple[float, str]:
+def solve_address_locations(inputs) -> float:
     unit_map = {
         "address_lines": "bits",
         "address_locations": "locations",
@@ -135,17 +136,17 @@ def solve_address_locations(inputs) -> Tuple[float, str]:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_storage_capacity(inputs) -> Tuple[float, str]:
+def solve_storage_capacity(inputs) -> float:
     n_data_lines_bytes = ByteConverter().convert(inputs["data_lines"], "b", "B")
-    n_memory_locs, _ = solve_address_locations(
+    n_memory_locs = solve_address_locations(
         {"address_lines": inputs["address_lines"]}
     )
-    total_bytes = n_data_lines_bytes * n_memory_locs
-    result = ByteConverter().convert(total_bytes, "B", inputs["to_unit"])
-    return result, f"{result :.5f} {inputs['to_unit']}"
+    result = n_data_lines_bytes * n_memory_locs
+    print(f"{result :.5f}")
+    return result
 
 
-def solve_avg_memory_read_time(inputs) -> Tuple[float, str]:
+def solve_avg_memory_read_time(inputs) -> float:
     unit_map: Dict[str, str] = {
         "access_time": "",
         "recovery_cycles": "",
@@ -181,7 +182,7 @@ def solve_avg_memory_read_time(inputs) -> Tuple[float, str]:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_memory_data_rate(inputs) -> Tuple[float, str]:
+def solve_memory_data_rate(inputs) -> float:
     unit_map: Dict[str, str] = {
         "memory_read_time": "clock read time",
         "memory_width": "bits",
@@ -201,7 +202,7 @@ def solve_memory_data_rate(inputs) -> Tuple[float, str]:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_cache_avg_read_time(inputs) -> Tuple[float, str]:
+def solve_cache_avg_read_time(inputs) -> float:
     unit_map: Dict[str, str] = {
         "p_cache": "",
         "sram": "clocks",
@@ -227,7 +228,7 @@ def solve_cache_avg_read_time(inputs) -> Tuple[float, str]:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_data_transfer_rate(inputs) -> Tuple[float, str]:
+def solve_data_transfer_rate(inputs) -> float:
     unit_map: Dict[str, str] = {
         "protocol_overhead": "cycles",
         "bus_width": "bytes",
@@ -249,7 +250,7 @@ def solve_data_transfer_rate(inputs) -> Tuple[float, str]:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_data_transfer_efficiency(inputs) -> Tuple[float, str]:
+def solve_data_transfer_efficiency(inputs) -> float:
     unit_map: Dict[str, str] = {
         "protocol_overhead": "cycles",
         "bus_width": "bytes",
@@ -271,7 +272,7 @@ def solve_data_transfer_efficiency(inputs) -> Tuple[float, str]:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_synchronous_bus_max_bandwidth(inputs) -> Tuple[float, str]:
+def solve_synchronous_bus_max_bandwidth(inputs) -> float:
     unit_map: Dict[str, str] = {
         "bus_width": "bytes",
         "clock_cycle_time": "sec",
@@ -318,7 +319,7 @@ def solve_synchronous_bus_max_bandwidth(inputs) -> Tuple[float, str]:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_asynchronous_bus_max_bandwidth(inputs) -> Tuple[float, str]:
+def solve_asynchronous_bus_max_bandwidth(inputs) -> float:
     unit_map: Dict[str, str] = {
         "bus_width": "bytes",
         "handshake_time": "sec",
@@ -354,7 +355,7 @@ def solve_asynchronous_bus_max_bandwidth(inputs) -> Tuple[float, str]:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_probability_of_failure(inputs) -> Tuple[float, str]:
+def solve_probability_of_failure(inputs) -> float:
     unit_map: Dict[str, str] = {
         "P": "",
         "n": "",
@@ -369,7 +370,7 @@ def solve_probability_of_failure(inputs) -> Tuple[float, str]:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_probability_of_no_failure(inputs) -> Tuple[float, str]:
+def solve_probability_of_no_failure(inputs) -> float:
     unit_map: Dict[str, str] = {
         "P": "",
         "n": "",

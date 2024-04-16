@@ -67,7 +67,7 @@ def test_raises_get_result():
     ],
 )
 def test_solve_clock_freq(inputs, expected_result) -> None:
-    assert float(solve_clock_freq(inputs)[0]) == expected_result
+    assert float(solve_clock_freq(inputs)) == expected_result
 
 
 @pytest.mark.parametrize(
@@ -81,7 +81,7 @@ def test_solve_clock_freq(inputs, expected_result) -> None:
     ],
 )
 def test_solve_max_speedup(inputs, expected_result) -> None:
-    assert float(solve_max_speedup(inputs)[0]) == expected_result
+    assert float(solve_max_speedup(inputs)) == expected_result
 
 
 @pytest.mark.parametrize(
@@ -93,7 +93,7 @@ def test_solve_max_speedup(inputs, expected_result) -> None:
     ],
 )
 def test_solve_true_speedup(inputs, expected_result) -> None:
-    assert float(solve_true_speedup(inputs)[0]) == expected_result
+    assert float(solve_true_speedup(inputs)) == expected_result
 
 
 @pytest.mark.parametrize(
@@ -105,7 +105,7 @@ def test_solve_true_speedup(inputs, expected_result) -> None:
     ],
 )
 def test_solve_gustafsons_law(inputs, expected_result) -> None:
-    assert float(solve_gustafsons_law(inputs)[0]) == expected_result
+    assert float(solve_gustafsons_law(inputs)) == expected_result
 
 
 @pytest.mark.parametrize(
@@ -154,7 +154,7 @@ def test_solve_gustafsons_law(inputs, expected_result) -> None:
     ],
 )
 def test_solve_branch_prediction(inputs, expected_result) -> None:
-    assert np.allclose(float(solve_branch_prediction(inputs)[0]), expected_result)
+    assert np.allclose(float(solve_branch_prediction(inputs)), expected_result)
 
 
 @pytest.mark.parametrize(
@@ -165,17 +165,17 @@ def test_solve_branch_prediction(inputs, expected_result) -> None:
     ],
 )
 def test_solve_address_locations(inputs, expected_result) -> None:
-    assert float(solve_address_locations(inputs)[0]) == expected_result
+    assert float(solve_address_locations(inputs)) == expected_result
 
 
 @pytest.mark.parametrize(
     "inputs, expected_result",
     [
-        ({"address_lines": 32, "data_lines": 64, "to_unit": "MB"}, 32768.00),
+        ({"address_lines": 32, "data_lines": 64}, 34359738368.0000),
     ],
 )
 def test_solve_storage_capacity(inputs, expected_result) -> None:
-    assert float(solve_storage_capacity(inputs)[0]) == expected_result
+    assert float(solve_storage_capacity(inputs)) == expected_result
 
 
 @pytest.mark.parametrize(
@@ -193,7 +193,7 @@ def test_solve_storage_capacity(inputs, expected_result) -> None:
     ],
 )
 def test_solve_avg_memory_read_time(inputs, expected_result) -> None:
-    assert float(solve_avg_memory_read_time(inputs)[0]) == expected_result
+    assert float(solve_avg_memory_read_time(inputs)) == expected_result
 
 
 @pytest.mark.parametrize(
@@ -210,7 +210,7 @@ def test_solve_avg_memory_read_time(inputs, expected_result) -> None:
     ],
 )
 def test_solve_memory_data_rate(inputs, expected_result) -> None:
-    assert float(solve_memory_data_rate(inputs)[0]) == expected_result
+    assert float(solve_memory_data_rate(inputs)) == expected_result
 
 
 @pytest.mark.parametrize(
@@ -229,7 +229,7 @@ def test_solve_memory_data_rate(inputs, expected_result) -> None:
     ],
 )
 def test_solve_cache_avg_read_time(inputs, expected_result) -> None:
-    assert float(solve_cache_avg_read_time(inputs)[0]) == expected_result
+    assert float(solve_cache_avg_read_time(inputs)) == expected_result
 
 
 @pytest.mark.parametrize(
@@ -282,7 +282,7 @@ def test_solve_cache_avg_read_time(inputs, expected_result) -> None:
     ],
 )
 def test_solve_data_transfer_rate(inputs, expected_result) -> None:
-    assert float(solve_data_transfer_rate(inputs)[0]) == expected_result
+    assert float(solve_data_transfer_rate(inputs)) == expected_result
 
 
 @pytest.mark.parametrize(
@@ -327,7 +327,7 @@ def test_solve_data_transfer_rate(inputs, expected_result) -> None:
     ],
 )
 def test_solve_data_transfer_efficiency(inputs, expected_result) -> None:
-    assert float(solve_data_transfer_efficiency(inputs)[0]) == expected_result
+    assert float(solve_data_transfer_efficiency(inputs)) == expected_result
 
 
 @pytest.mark.parametrize(
@@ -427,7 +427,7 @@ def test_solve_data_transfer_efficiency(inputs, expected_result) -> None:
     ],
 )
 def test_solve_synchronous_bus_max_bandwidth(inputs, expected_result) -> None:
-    assert float(solve_synchronous_bus_max_bandwidth(inputs)[0]) == expected_result
+    assert float(solve_synchronous_bus_max_bandwidth(inputs)) == expected_result
 
 
 @pytest.mark.parametrize(
@@ -445,7 +445,7 @@ def test_solve_synchronous_bus_max_bandwidth(inputs, expected_result) -> None:
     ],
 )
 def test_solve_asynchronous_bus_max_bandwidth(inputs, expected_result) -> None:
-    assert float(solve_asynchronous_bus_max_bandwidth(inputs)[0]) == pytest.approx(
+    assert float(solve_asynchronous_bus_max_bandwidth(inputs)) == pytest.approx(
         expected_result
     )
 
@@ -471,9 +471,7 @@ def test_solve_asynchronous_bus_max_bandwidth(inputs, expected_result) -> None:
     ],
 )
 def test_solve_probability_of_failure(inputs, expected_result) -> None:
-    assert float(solve_probability_of_failure(inputs)[0]) == pytest.approx(
-        expected_result
-    )
+    assert float(solve_probability_of_failure(inputs)) == pytest.approx(expected_result)
 
 
 @pytest.mark.parametrize(
@@ -494,6 +492,6 @@ def test_solve_probability_of_failure(inputs, expected_result) -> None:
     ],
 )
 def test_solve_probability_of_no_failure(inputs, expected_result) -> None:
-    assert float(solve_probability_of_no_failure(inputs)[0]) == pytest.approx(
+    assert float(solve_probability_of_no_failure(inputs)) == pytest.approx(
         expected_result
     )
