@@ -138,6 +138,22 @@ def solve_reads_per_sec(inputs: Dict) -> float:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
+def solve_memory_bandwidth(inputs: Dict) -> float:
+    unit_map: Dict[str, str] = {
+        "reads_per_sec": "reads per sec",
+        "bytes": "B",
+        "memory_bandwidth": "bytes per second",
+    }
+
+    reads_per_sec, bytes, memory_bandwidth = sp.symbols(
+        "reads_per_sec, bytes, memory_bandwidth"
+    )
+    equation = (reads_per_sec * bytes) - memory_bandwidth
+
+    output_sym = _get_output_sym(inputs, [reads_per_sec, bytes, memory_bandwidth])
+    return _get_result(inputs, equation, output_sym, unit_map)
+
+
 def solve_address_locations(inputs) -> float:
     unit_map = {
         "address_lines": "bits",

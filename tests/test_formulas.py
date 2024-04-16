@@ -18,6 +18,7 @@ from src.formulas import (
     solve_data_transfer_rate,
     solve_gustafsons_law,
     solve_max_speedup,
+    solve_memory_bandwidth,
     solve_memory_data_rate,
     solve_probability_of_failure,
     solve_probability_of_no_failure,
@@ -189,6 +190,39 @@ def test_solve_branch_prediction(inputs, expected_result) -> None:
 )
 def test_solve_reads_per_sec(inputs, expected_result) -> None:
     assert float(solve_reads_per_sec(inputs)) == expected_result
+
+
+@pytest.mark.parametrize(
+    "inputs, expected_result",
+    [
+        (
+            {
+                "reads_per_sec": 266600000.0,
+                "bytes": ByteConverter().convert(32, "b", "B"),
+                # "memory_bandwidth": 1066400000.0
+            },
+            1066400000.0,
+        ),
+        (
+            {
+                "reads_per_sec": 266600000.0,
+                # "bytes": ByteConverter().convert(32, "b", "B"),
+                "memory_bandwidth": 1066400000.0,
+            },
+            ByteConverter().convert(32, "b", "B"),
+        ),
+        (
+            {
+                # "reads_per_sec": 266600000.0,
+                "bytes": ByteConverter().convert(32, "b", "B"),
+                "memory_bandwidth": 1066400000.0,
+            },
+            266600000.0,
+        ),
+    ],
+)
+def test_solve_memory_bandwidth(inputs, expected_result) -> None:
+    assert float(solve_memory_bandwidth(inputs)) == expected_result
 
 
 @pytest.mark.parametrize(
