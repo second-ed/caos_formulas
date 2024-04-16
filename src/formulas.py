@@ -61,7 +61,6 @@ def solve_clock_freq(inputs: Dict) -> float:
     equation = 1 / t - f
 
     output_sym = _get_output_sym(inputs, [t, f])
-
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
@@ -72,7 +71,6 @@ def solve_max_speedup(inputs: Dict) -> float:
     equation = 1 / (1 - P) - max_speedup
 
     output_sym = _get_output_sym(inputs, [max_speedup, P])
-
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
@@ -83,7 +81,6 @@ def solve_true_speedup(inputs: Dict) -> float:
     equation = 1 / ((1 - P) + (P / n)) - true_speedup
 
     output_sym = _get_output_sym(inputs, [true_speedup, P, n])
-
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
@@ -118,7 +115,6 @@ def solve_branch_prediction(inputs: Dict) -> float:
     output_sym = _get_output_sym(
         inputs, [cycles_saved, cycles_cost, p_correct, p_incorrect, total_savings]
     )
-
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
@@ -164,7 +160,6 @@ def solve_address_locations(inputs) -> float:
     equation = (2**address_lines) - address_locations
 
     output_sym = _get_output_sym(inputs, [address_lines, address_locations])
-
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
@@ -208,7 +203,6 @@ def solve_avg_memory_read_time(inputs) -> float:
             avg_memory_read_time,
         ],
     )
-
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
@@ -228,7 +222,26 @@ def solve_memory_data_rate(inputs) -> float:
     output_sym = _get_output_sym(
         inputs, [memory_read_time, memory_width, clock_rate, memory_data_rate]
     )
+    return _get_result(inputs, equation, output_sym, unit_map)
 
+
+def solve_sustainable_data_rate(inputs) -> float:
+    unit_map: Dict[str, str] = {
+        "n_sectors": "sectors",
+        "sector_size": "B",
+        "rotational_latency": "RPM",
+        "sustainable_data_rate": "",
+    }
+
+    n_sectors, sector_size, rotational_latency, sustainable_data_rate = sp.symbols(
+        "n_sectors sector_size rotational_latency sustainable_data_rate"
+    )
+    equation = (
+        1 / (((60 / rotational_latency) / n_sectors) / sector_size)
+    ) - sustainable_data_rate
+    output_sym = _get_output_sym(
+        inputs, [n_sectors, sector_size, rotational_latency, sustainable_data_rate]
+    )
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
@@ -254,7 +267,6 @@ def solve_cache_avg_read_time(inputs) -> float:
     output_sym = _get_output_sym(
         inputs, [p_cache, sram, dram, ras, cas, cache_avg_read_time]
     )
-
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
@@ -276,7 +288,6 @@ def solve_data_transfer_rate(inputs) -> float:
     output_sym = _get_output_sym(
         inputs, [protocol_overhead, bus_width, bus_frequency, data_transfer_rate]
     )
-
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
@@ -298,7 +309,6 @@ def solve_data_transfer_efficiency(inputs) -> float:
     output_sym = _get_output_sym(
         inputs, [protocol_overhead, bus_width, block_size, data_transfer_efficiency]
     )
-
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
@@ -345,7 +355,6 @@ def solve_synchronous_bus_max_bandwidth(inputs) -> float:
             maximum_bandwidth,
         ],
     )
-
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
@@ -381,7 +390,6 @@ def solve_asynchronous_bus_max_bandwidth(inputs) -> float:
             maximum_bandwidth,
         ],
     )
-
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
@@ -396,7 +404,6 @@ def solve_probability_of_failure(inputs) -> float:
     equation = (P**n) - P_failure
 
     output_sym = _get_output_sym(inputs, [P, n, P_failure])
-
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
@@ -411,5 +418,4 @@ def solve_probability_of_no_failure(inputs) -> float:
     equation = ((1 - P) ** n) - P_failure
 
     output_sym = _get_output_sym(inputs, [P, n, P_failure])
-
     return _get_result(inputs, equation, output_sym, unit_map)

@@ -24,6 +24,7 @@ from src.formulas import (
     solve_probability_of_no_failure,
     solve_reads_per_sec,
     solve_storage_capacity,
+    solve_sustainable_data_rate,
     solve_synchronous_bus_max_bandwidth,
     solve_true_speedup,
 )
@@ -279,6 +280,51 @@ def test_solve_avg_memory_read_time(inputs, expected_result) -> None:
 )
 def test_solve_memory_data_rate(inputs, expected_result) -> None:
     assert float(solve_memory_data_rate(inputs)) == expected_result
+
+
+@pytest.mark.parametrize(
+    "inputs, expected_result",
+    [
+        (
+            {
+                # "n_sectors": 100,
+                "sector_size": ByteConverter().convert(1, "KB", "B"),
+                "rotational_latency": 7200,
+                "sustainable_data_rate": 12000000.0,
+            },
+            100.0,
+        ),
+        (
+            {
+                "n_sectors": 100,
+                # "sector_size": ByteConverter().convert(1, "KB", "B"),
+                "rotational_latency": 7200,
+                "sustainable_data_rate": 12000000.0,
+            },
+            ByteConverter().convert(1, "KB", "B"),
+        ),
+        (
+            {
+                "n_sectors": 100,
+                "sector_size": ByteConverter().convert(1, "KB", "B"),
+                # "rotational_latency": 7200,
+                "sustainable_data_rate": 12000000.0,
+            },
+            7200.0,
+        ),
+        (
+            {
+                "n_sectors": 100,
+                "sector_size": ByteConverter().convert(1, "KB", "B"),
+                "rotational_latency": 7200,
+                # "sustainable_data_rate": 12000000.0,
+            },
+            12000000.0,
+        ),
+    ],
+)
+def test_solve_sustainable_data_rate(inputs, expected_result) -> None:
+    assert float(solve_sustainable_data_rate(inputs)) == expected_result
 
 
 @pytest.mark.parametrize(
