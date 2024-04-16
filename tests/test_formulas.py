@@ -21,6 +21,7 @@ from src.formulas import (
     solve_memory_data_rate,
     solve_probability_of_failure,
     solve_probability_of_no_failure,
+    solve_reads_per_sec,
     solve_storage_capacity,
     solve_synchronous_bus_max_bandwidth,
     solve_true_speedup,
@@ -155,6 +156,39 @@ def test_solve_gustafsons_law(inputs, expected_result) -> None:
 )
 def test_solve_branch_prediction(inputs, expected_result) -> None:
     assert np.allclose(float(solve_branch_prediction(inputs)), expected_result)
+
+
+@pytest.mark.parametrize(
+    "inputs, expected_result",
+    [
+        (
+            {
+                # "reads_per_sec": 266600000.0,
+                "freq": HertzConverter().convert(1333, "MHz", "Hz"),
+                "clocks_per_read": 5,
+            },
+            266600000.0,
+        ),
+        (
+            {
+                "reads_per_sec": 266600000.0,
+                # "freq": HertzConverter().convert(1333, "MHz", "Hz"),
+                "clocks_per_read": 5,
+            },
+            HertzConverter().convert(1333, "MHz", "Hz"),
+        ),
+        (
+            {
+                "reads_per_sec": 266600000.0,
+                "freq": HertzConverter().convert(1333, "MHz", "Hz"),
+                # "clocks_per_read": 5,
+            },
+            5,
+        ),
+    ],
+)
+def test_solve_reads_per_sec(inputs, expected_result) -> None:
+    assert float(solve_reads_per_sec(inputs)) == expected_result
 
 
 @pytest.mark.parametrize(

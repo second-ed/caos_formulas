@@ -134,9 +134,7 @@ def solve_reads_per_sec(inputs: Dict) -> float:
     )
     equation = (freq / clocks_per_read) - reads_per_sec
 
-    output_sym = _get_output_sym(
-        inputs, [reads_per_sec, freq, clocks_per_read]
-    )
+    output_sym = _get_output_sym(inputs, [reads_per_sec, freq, clocks_per_read])
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
@@ -156,9 +154,7 @@ def solve_address_locations(inputs) -> float:
 
 def solve_storage_capacity(inputs) -> float:
     n_data_lines_bytes = ByteConverter().convert(inputs["data_lines"], "b", "B")
-    n_memory_locs = solve_address_locations(
-        {"address_lines": inputs["address_lines"]}
-    )
+    n_memory_locs = solve_address_locations({"address_lines": inputs["address_lines"]})
     result = n_data_lines_bytes * n_memory_locs
     print(f"{result :.5f}")
     return result
