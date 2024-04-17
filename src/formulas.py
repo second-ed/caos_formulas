@@ -33,6 +33,7 @@ class TimeConverter:
 
 
 def _solve_equation(equation, inputs, output_sym):
+    print(equation)
     return sp.solve(equation.subs(inputs), output_sym)
 
 
@@ -120,13 +121,13 @@ def solve_branch_prediction(inputs: Dict) -> float:
 
 def solve_reads_per_sec(inputs: Dict) -> float:
     unit_map: Dict[str, str] = {
-        "reads_per_sec": "reads per sec",
         "freq": "Hz",
         "clocks_per_read": "clocks",
+        "reads_per_sec": "reads per sec",
     }
 
-    reads_per_sec, freq, clocks_per_read = sp.symbols(
-        "reads_per_sec freq clocks_per_read"
+    freq, clocks_per_read, reads_per_sec = sp.symbols(
+        "freq clocks_per_read reads_per_sec"
     )
     equation = (freq / clocks_per_read) - reads_per_sec
 
