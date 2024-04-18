@@ -1,0 +1,20 @@
+repos:
+- repo: local
+  hooks:
+    - id: black
+      name: black
+      entry: black
+      language: system
+      types: [python, jupyter]
+    # - id: ruff
+    #   name: ruff
+    #   entry: ruff
+    #   language: system
+    #   types_or: [ python, pyi, jupyter ]
+    #   args: [ --fix ]
+    - id: pytest-check
+      name: pytest-check
+      entry: pytest --cov --cov-report term-missing
+      language: system
+      pass_filenames: false
+      always_run: true
