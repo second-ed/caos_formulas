@@ -2,12 +2,15 @@ import numpy as np
 import sympy as sp
 import pytest
 
-from src.formulas import (
+from src.formula_utils import (
     ByteConverter,
     HertzConverter,
     TimeConverter,
     _get_output_sym,
     _get_result,
+)
+
+from src.formulas import (
     solve_address_locations,
     solve_asynchronous_bus_max_bandwidth,
     solve_avg_memory_read_time,

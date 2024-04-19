@@ -2,8 +2,11 @@ from typing import Dict
 
 import sympy as sp
 
-from src.constants import BYTES_MAP, HZ_MAP, TIME_MAP
-from src.formula_utils import _get_output_sym, _get_result, ByteConverter, HertzConverter, TimeConverter
+from src.formula_utils import (
+    _get_output_sym,
+    _get_result,
+    ByteConverter,
+)
 
 
 def solve_clock_freq(inputs: Dict) -> float:
