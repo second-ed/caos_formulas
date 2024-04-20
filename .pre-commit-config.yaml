@@ -6,9 +6,9 @@ repos:
       entry: black
       language: system
       types: [python, jupyter]
-    # - id: pytest-check
-    #   name: pytest-check
-    #   entry: pytest -v --cov --cov-report term-missing
-    #   language: system
-    #   pass_filenames: false
-    #   always_run: true
+    - id: pytest-check
+      name: pytest-check
+      entry: pytest -v --cov --cov-report term-missing
+      language: system
+      pass_filenames: false
+      always_run: true

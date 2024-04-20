@@ -160,7 +160,7 @@ def test_cycle_time_normal_mode(inputs, expected_result):
         ),
         (
             {
-                # "cycle_time_n_reads_burst_mode": 10,
+                "cycle_time_n_reads_burst_mode": 10,
                 "ras": 1,
                 "cas": 1,
                 # "wait_time": 1,
