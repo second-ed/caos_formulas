@@ -20,6 +20,9 @@ def compress_text(text, encoding_map, default_bits = 8) -> tuple:
     actual_compression = count_compressed_bits(text, default_bits, encoding_map)
     optimised_compression = count_compressed_bits(text, default_bits, optimised_encoding_map)
 
+    actual_compression_ratio = no_compression / actual_compression
+    optimised_compression_ratio = no_compression / optimised_compression
+
     for k, v in vars().items():
         print(f"{k} = {v}")
 
@@ -35,4 +38,6 @@ def compress_text(text, encoding_map, default_bits = 8) -> tuple:
         no_compression,
         actual_compression,
         optimised_compression,
+        actual_compression_ratio,
+        optimised_compression_ratio,
     )
