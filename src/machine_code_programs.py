@@ -23,7 +23,7 @@ def ADD(memory, Rx, Ry, Rz):
 
 
 def SUB(memory, Rx, Ry, Rz):
-    memory[Rz] = memory[Rx] - memory[Ry]
+    memory[Rz] = memory[Ry] - memory[Rx]
 
 
 def MUL(memory, Rx, Ry, Rz):

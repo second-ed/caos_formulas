@@ -97,9 +97,9 @@ def test_ADD(memory, Rx, Ry, Rz, expected_result) -> None:
 @pytest.mark.parametrize(
     "memory, Rx, Ry, Rz, expected_result",
     [
-        ([2, 3, 0], 0, 1, 2, [2, 3, -1]),
-        ([2, 3, 0], 0, 1, 1, [2, -1, 0]),
-        ([2, 3, 0], 0, 1, 0, [-1, 3, 0]),
+        ([2, 3, 0], 0, 1, 2, [2, 3, 1]),
+        ([2, 3, 0], 0, 1, 1, [2, 1, 0]),
+        ([2, 3, 0], 0, 1, 0, [1, 3, 0]),
     ],
 )
 def test_SUB(memory, Rx, Ry, Rz, expected_result) -> None:
@@ -298,7 +298,7 @@ def test_CMP_NN(memory, Rx, nn, comparison_op, expected_result) -> None:
                 (LDI, (6, 0)),
                 (MUL, (1, 2, 1)),
                 (MUL, (3, 4, 3)),
-                (SUB, (3, 1, 6)),
+                (SUB, (1, 3, 6)),
                 (HALT, ()),
             ],
             [0 for _ in range(16)],
