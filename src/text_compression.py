@@ -53,3 +53,4 @@ def compress_text(text, encoding_map, default_bits=8) -> tuple:
         optimised_compression_ratio,
         true_optimised_compression_ratio,
     )
+
