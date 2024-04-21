@@ -2,7 +2,7 @@
 /.ruff_cache
 /__pycache__
 
-
+*deprecated*
 scratch.ipynb
 
 # Byte-compiled / optimized / DLL files
