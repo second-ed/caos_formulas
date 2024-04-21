@@ -57,7 +57,7 @@ def solve_cycles_block(inputs: Dict) -> float:
 
 def solve_bus_data_transfer_efficiency(inputs: Dict) -> float:
     unit_map: Dict[str, str] = {
-        "bus_data_transfer_efficiency": "",
+        "bus_data_transfer_efficiency": "%",
         "cycles_block": "",
         "cycles_overhead": "",
     }
@@ -76,10 +76,10 @@ def solve_bus_data_transfer_efficiency(inputs: Dict) -> float:
 
 def solve_read_time_synchronous(inputs: Dict) -> float:
     unit_map: Dict[str, str] = {
-        "read_time_synchronous": "",
-        "time_send_address": "",
-        "time_memory_access": "",
-        "time_send_data": "",
+        "read_time_synchronous": "s",
+        "time_send_address": "s",
+        "time_memory_access": "s",
+        "time_send_data": "s",
     }
 
     (
@@ -102,9 +102,9 @@ def solve_read_time_synchronous(inputs: Dict) -> float:
 
 def solve_read_time_asynchronous(inputs: Dict) -> float:
     unit_map: Dict[str, str] = {
-        "read_time_asynchronous": "",
-        "time_handshake": "",
-        "time_memory_access": "",
+        "read_time_asynchronous": "s",
+        "time_handshake": "s",
+        "time_memory_access": "s",
     }
 
     read_time_asynchronous, time_handshake, time_memory_access = sp.symbols(
@@ -122,7 +122,7 @@ def solve_read_time_asynchronous(inputs: Dict) -> float:
 def solve_bandwidth_max_for_bus(inputs: Dict) -> float:
     unit_map: Dict[str, str] = {
         "bandwidth_max_for_bus": "",
-        "n_bytes_to_transfer": "",
+        "n_bytes_to_transfer": "bytes",
         "read_time_per_block": "",
         "n_blocks_total": "",
     }
@@ -166,9 +166,9 @@ def solve_disk_revolution_time_sec(inputs: Dict) -> float:
 
 def solve_disk_access_time_worst(inputs: Dict) -> float:
     unit_map: Dict[str, str] = {
-        "disk_access_time_worst": "",
-        "time_rotational_latency": "",
-        "time_head_seek": "",
+        "disk_access_time_worst": "s",
+        "time_rotational_latency": "s",
+        "time_head_seek": "s",
     }
 
     disk_access_time_worst, time_rotational_latency, time_head_seek = sp.symbols(
@@ -183,8 +183,8 @@ def solve_disk_access_time_worst(inputs: Dict) -> float:
 
 def solve_disk_access_time_avg(inputs: Dict) -> float:
     unit_map: Dict[str, str] = {
-        "disk_access_time_avg": "",
-        "disk_access_time_worst": "",
+        "disk_access_time_avg": "s",
+        "disk_access_time_worst": "s",
     }
 
     disk_access_time_avg, disk_access_time_worst = sp.symbols(

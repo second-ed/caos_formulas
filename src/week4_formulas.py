@@ -31,7 +31,7 @@ def solve_performance_gain_from_hyperthreading(inputs: Dict) -> float:
 
 def solve_cpu_time_pct_thread(inputs: Dict) -> float:
     unit_map: Dict[str, str] = {
-        "cpu_time_pct_thread": "",
+        "cpu_time_pct_thread": "%",
         "total_time_slice_thread": "",
         "switch_time_thread": "",
     }
@@ -50,9 +50,9 @@ def solve_cpu_time_pct_thread(inputs: Dict) -> float:
 
 def solve_time_interval_between_repetitions(inputs: Dict) -> float:
     unit_map: Dict[str, str] = {
-        "time_interval_between_repetitions": "",
-        "total_time_slice_thread": "",
-        "switch_time_thread": "",
+        "time_interval_between_repetitions": "s",
+        "total_time_slice_thread": "s",
+        "switch_time_thread": "s",
         "n_tasks": "",
     }
 
