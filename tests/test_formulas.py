@@ -291,7 +291,7 @@ def test_solve_memory_data_rate(inputs, expected_result) -> None:
         (
             {
                 # "n_sectors": 100,
-                "sector_size": ByteConverter().convert(1, "KB", "B"),
+                "sector_size": ByteConverter().convert(1, "KiB", "B"),
                 "rotational_latency": 7200,
                 "sustainable_data_rate": 12000000.0,
             },
@@ -300,16 +300,16 @@ def test_solve_memory_data_rate(inputs, expected_result) -> None:
         (
             {
                 "n_sectors": 100,
-                # "sector_size": ByteConverter().convert(1, "KB", "B"),
+                # "sector_size": ByteConverter().convert(1, "KiB", "B"),
                 "rotational_latency": 7200,
                 "sustainable_data_rate": 12000000.0,
             },
-            ByteConverter().convert(1, "KB", "B"),
+            ByteConverter().convert(1, "KiB", "B"),
         ),
         (
             {
                 "n_sectors": 100,
-                "sector_size": ByteConverter().convert(1, "KB", "B"),
+                "sector_size": ByteConverter().convert(1, "KiB", "B"),
                 # "rotational_latency": 7200,
                 "sustainable_data_rate": 12000000.0,
             },
@@ -318,7 +318,7 @@ def test_solve_memory_data_rate(inputs, expected_result) -> None:
         (
             {
                 "n_sectors": 100,
-                "sector_size": ByteConverter().convert(1, "KB", "B"),
+                "sector_size": ByteConverter().convert(1, "KiB", "B"),
                 "rotational_latency": 7200,
                 # "sustainable_data_rate": 12000000.0,
             },

@@ -264,22 +264,22 @@ def test_bandwidth_max_for_bus(inputs, expected_result):
     [
         (
             {
-                # "disk_revolution_time_sec": 0.03,
+                # "rotational_latency_time_sec": 0.03,
                 "rotations_per_min": 2000
             },
             0.03,
         ),
         (
             {
-                "disk_revolution_time_sec": 0.03,
+                "rotational_latency_time_sec": 0.03,
                 # "rotations_per_min": 2000
             },
             2000,
         ),
     ],
 )
-def test_disk_revolution_time_sec(inputs, expected_result):
-    assert solve_disk_revolution_time_sec(inputs) == expected_result
+def test_rotational_latency_time_sec(inputs, expected_result):
+    assert solve_rotational_latency_time_sec(inputs) == expected_result
 
 
 @pytest.mark.parametrize(

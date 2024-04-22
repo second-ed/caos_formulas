@@ -150,17 +150,19 @@ def solve_bandwidth_max_for_bus(inputs: Dict) -> float:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
-def solve_disk_revolution_time_sec(inputs: Dict) -> float:
+def solve_rotational_latency_time_sec(inputs: Dict) -> float:
     unit_map: Dict[str, str] = {
-        "disk_revolution_time_sec": "",
+        "rotational_latency_time_sec": "",
         "rotations_per_min": "",
     }
 
-    disk_revolution_time_sec, rotations_per_min = sp.symbols(
-        "disk_revolution_time_sec rotations_per_min"
+    rotational_latency_time_sec, rotations_per_min = sp.symbols(
+        "rotational_latency_time_sec rotations_per_min"
     )
-    equation = (60 / rotations_per_min) - disk_revolution_time_sec
-    output_sym = _get_output_sym(inputs, [disk_revolution_time_sec, rotations_per_min])
+    equation = (60 / rotations_per_min) - rotational_latency_time_sec
+    output_sym = _get_output_sym(
+        inputs, [rotational_latency_time_sec, rotations_per_min]
+    )
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
