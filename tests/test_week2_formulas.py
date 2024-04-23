@@ -1,6 +1,6 @@
 import pytest
 
-from src.formula_utils import HertzConverter
+from src.formula_utils import ByteConverter, HertzConverter
 from src.week2_formulas import *
 
 
@@ -58,6 +58,51 @@ def test_n_addressable_locations(inputs, expected_result):
 )
 def test_storage_capacity(inputs, expected_result):
     assert solve_storage_capacity(inputs) == expected_result
+
+
+@pytest.mark.parametrize(
+    "inputs, expected_result",
+    [
+        (
+            {
+                "cycle_clocks": 5,
+                "data_width": ByteConverter().convert(32, "b", "B"),
+                "freq": HertzConverter().convert(1333, "MHz", "Hz"),
+                # "avg_memory_bandwidth": 1066400000.0,
+            },
+            1066400000,
+        ),
+        (
+            {
+                "cycle_clocks": 5,
+                "data_width": ByteConverter().convert(32, "b", "B"),
+                # "freq": HertzConverter().convert(1333, "MHz", "Hz"),
+                "avg_memory_bandwidth": 1066400000.0,
+            },
+            HertzConverter().convert(1333, "MHz", "Hz"),
+        ),
+        (
+            {
+                "cycle_clocks": 5,
+                # "data_width": ByteConverter().convert(32, "b", "B"),
+                "freq": HertzConverter().convert(1333, "MHz", "Hz"),
+                "avg_memory_bandwidth": 1066400000.0,
+            },
+            ByteConverter().convert(32, "b", "B"),
+        ),
+        (
+            {
+                # "cycle_clocks": 5,
+                "data_width": ByteConverter().convert(32, "b", "B"),
+                "freq": HertzConverter().convert(1333, "MHz", "Hz"),
+                "avg_memory_bandwidth": 1066400000.0,
+            },
+            5,
+        ),
+    ],
+)
+def test_avg_memory_bandwidth(inputs, expected_result):
+    assert solve_avg_memory_bandwidth(inputs) == expected_result
 
 
 @pytest.mark.parametrize(

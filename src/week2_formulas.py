@@ -36,6 +36,24 @@ def solve_storage_capacity(inputs: Dict) -> float:
     return _get_result(inputs, equation, output_sym, unit_map)
 
 
+def solve_avg_memory_bandwidth(inputs: Dict) -> float:
+    unit_map: Dict[str, str] = {
+        "cycle_clocks": "clocks",
+        "data_width": "bytes",
+        "freq": "Hz",
+        "avg_memory_bandwidth": "bytes / sec",
+    }
+
+    cycle_clocks, data_width, freq, avg_memory_bandwidth = sp.symbols(
+        "cycle_clocks data_width freq avg_memory_bandwidth"
+    )
+    equation = (freq * data_width / cycle_clocks) - avg_memory_bandwidth
+    output_sym = _get_output_sym(
+        inputs, [cycle_clocks, data_width, freq, avg_memory_bandwidth]
+    )
+    return _get_result(inputs, equation, output_sym, unit_map)
+
+
 def solve_cycle_time_normal_mode(inputs: Dict) -> float:
     unit_map: Dict[str, str] = {
         "cycle_time_normal_mode": "",
